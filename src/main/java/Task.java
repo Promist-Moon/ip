@@ -1,0 +1,22 @@
+public class Task {
+    String description;
+    boolean isDone;
+
+    public Task(String description, boolean isDone) {
+        this.description = description;
+        this.isDone = isDone;
+    }
+
+    @Override
+    public String toString() {
+        return (isDone ? "[X] " : "[ ] ") + description;
+    }
+
+    public void setDone() {
+        this.isDone = !this.isDone;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
+}
