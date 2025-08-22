@@ -16,6 +16,10 @@ public class Task {
         this.isDone = !this.isDone;
     }
 
+    public boolean getDone() {
+        return this.isDone;
+    }
+
     public String getDescription() {
         return this.description;
     }
