@@ -98,7 +98,7 @@ public class Locky {
                         t.setDone();
                         System.out.println("Locked In! Task marked as completed:");
                     }
-                } else if (cmd.equals("unmark")) { // unmark
+                } else if (cmd.equals("unmark")) {
                     if (!done) {
                         System.out.println("Oh.... it's still not done.");
                     } else {
