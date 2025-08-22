@@ -10,4 +10,7 @@ unmark 4
 todo
 deadline forget to update input.txt
 event party from 10pm to 2am
+delete
+delete 2
+list
 bye

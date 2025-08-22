@@ -75,6 +75,7 @@ public class Locky {
                 System.out.println();
                 break;
             }
+            case "delete":
             case "mark":
             case "unmark": {
                 if (args.isEmpty()) throw new LockyException("Which task number to " + cmd + "? e.g., \"" + cmd + " 2\"");
@@ -97,13 +98,16 @@ public class Locky {
                         t.setDone();
                         System.out.println("Locked In! Task marked as completed:");
                     }
-                } else { // unmark
+                } else if (cmd.equals("unmark")) { // unmark
                     if (!done) {
                         System.out.println("Oh.... it's still not done.");
                     } else {
                         t.setUndone();
                         System.out.println("Ok, undone. Back to work!");
                     }
+                } else {
+                    list.remove(index);
+                    System.out.println("Ok, so let's just forget that task existed...");
                 }
                 System.out.println(t + "\n");
                 break;
