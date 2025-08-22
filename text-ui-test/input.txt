@@ -1,7 +1,13 @@
 todo make brownies
 deadline send in 2103T /by 4 30pm
 list
+mark
 mark 2
+mark two
 list
 event project meeting /from Mon 2pm /to 4pm
+unmark 4
+todo
+deadline forget to update input.txt
+event party from 10pm to 2am
 bye

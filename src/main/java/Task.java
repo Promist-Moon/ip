@@ -13,7 +13,11 @@ public class Task {
     }
 
     public void setDone() {
-        this.isDone = !this.isDone;
+        this.isDone = true;
+    }
+
+    public void setUndone() {
+        this.isDone = false;
     }
 
     public boolean getDone() {
