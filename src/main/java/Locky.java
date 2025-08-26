@@ -1,6 +1,8 @@
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.regex.*;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Locky {
     private static final Pattern DEADLINE_RE = Pattern.compile("^(.+?)\\s*/by\\s+(.+)$");
