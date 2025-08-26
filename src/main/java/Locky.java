@@ -1,13 +1,21 @@
 import java.util.Objects;
 import java.util.Scanner;
-import java.util.ArrayList;
 import java.util.regex.*;
 
 public class Locky {
     private static final Pattern DEADLINE_RE = Pattern.compile("^(.+?)\\s*/by\\s+(.+)$");
     private static final Pattern EVENT_RE    = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
 
-    public static void main(String[] args) {
+    private final TaskList list;
+    private final Scanner scanner;
+
+    public Locky(String filePath) {
+        Storage storage = new Storage(filePath);
+        this.list = new TaskList(storage);
+        this.scanner = new Scanner(System.in);
+    }
+
+    public void run() {
         String divider = "____________________________________________________________\n";
         String logo = "     __________\n" +
                 "    / .------. \\\n" +
@@ -25,15 +33,11 @@ public class Locky {
         + "Reminding you to Lock In!\n"
         + "What can I do for you?\n";
 
-        ArrayList<Task> list = new ArrayList<>();
-
         System.out.println(logo + intro);
-        Scanner scanner = new Scanner(System.in);
-        String taskString;
 
         // program is not being exited
         while (true) {
-            taskString = scanner.nextLine();
+            String taskString = scanner.nextLine();
 
             if (Objects.equals(taskString, "bye")) {
                 // exit
@@ -44,7 +48,7 @@ public class Locky {
             System.out.println(divider);
 
             try {
-                handleLine(taskString, list);
+                handleLine(taskString);
             } catch (LockyException e) {
                 // print validation error but keep program running
                 System.out.println(e.getMessage() + "\n");
@@ -59,7 +63,7 @@ public class Locky {
         scanner.close();
     }
 
-    private static void handleLine(String taskString, ArrayList<Task> list) throws LockyException {
+    private void handleLine(String taskString) throws LockyException {
         String trimmed = taskString == null ? "" : taskString.trim();
         if (trimmed.isEmpty()) throw new LockyException("Say something? (try: todo … / deadline … / event …)");
 
@@ -69,10 +73,7 @@ public class Locky {
 
         switch (cmd) {
             case "list": {
-                for (int i = 0; i < list.size(); i++) {
-                    System.out.println((i + 1) + ". " + list.get(i));
-                }
-                System.out.println();
+                System.out.println(list.printableList());
                 break;
             }
             case "delete":
@@ -85,42 +86,40 @@ public class Locky {
                 } catch (NumberFormatException e) {
                     throw new LockyException("Not a number: \"" + args + "\". Try \"" + cmd + " 2\".");
                 }
-                int index = taskNumber - 1;
-                if (index < 0 || index >= list.size()) throw new LockyException("No such task: " + taskNumber);
-
-                Task t = list.get(index);
-                boolean done = t.getDone();
-
-                if (cmd.equals("mark")) {
-                    if (done) {
-                        System.out.println("You locked in once you don't have to do this again");
+                try {
+                    Task t;
+                    if (cmd.equals("mark")) {
+                        boolean wasDone = list.get(taskNumber).getDone();
+                        t = list.mark(taskNumber);
+                        System.out.println((wasDone ? "You locked in once you don't have to do this again" :
+                                "Locked In! Task marked as completed:"));
+                    } else if (cmd.equals("unmark")) {
+                        boolean wasDone = list.get(taskNumber).getDone();
+                        t = list.unmark(taskNumber);
+                        System.out.println((!wasDone ? "Oh.... it's still not done." :
+                                "Ok, undone. Back to work!"));
                     } else {
-                        t.setDone();
-                        System.out.println("Locked In! Task marked as completed:");
+                        t = list.delete(taskNumber);
+                        System.out.println("Ok, so let's just forget that task existed...");
                     }
-                } else if (cmd.equals("unmark")) {
-                    if (!done) {
-                        System.out.println("Oh.... it's still not done.");
-                    } else {
-                        t.setUndone();
-                        System.out.println("Ok, undone. Back to work!");
-                    }
-                } else {
-                    list.remove(index);
-                    System.out.println("Ok, so let's just forget that task existed...");
+                    System.out.println(t + "\n");
+                } catch (java.io.IOException ioe) {
+                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
                 }
-                System.out.println(t + "\n");
                 break;
             }
             case "todo": {
                 if (args.isEmpty()) throw new LockyException("Todo needs a description. Try: \"todo buy milk\"");
-                Todo task = new Todo(args, false);
-                list.add(task);
-                System.out.println("Added: " + task);
+                try {
+                    list.addTodo(args);
+                    System.out.println("Added: " + list.get(list.size()) + "\n");
+                } catch (java.io.IOException ioe) {
+                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
+                }
                 break;
             }
             case "deadline": {
-                if (args.isEmpty()) throw new LockyException("Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2025-09-01 23:59\"");
+                if (args.isEmpty()) throw new LockyException("Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by Mon 2359\"");
                 Matcher m = DEADLINE_RE.matcher(args);
                 if (!m.matches()) {
                     if (!args.contains("/by")) throw new LockyException("Missing \"/by\". Format: \"deadline <desc> /by <when>\"");
@@ -131,9 +130,12 @@ public class Locky {
                 if (desc.isEmpty()) throw new LockyException("Deadline description cannot be empty.");
                 if (by.isEmpty())   throw new LockyException("Deadline time cannot be empty after /by.");
 
-                Deadline task = new Deadline(desc, false, by);
-                list.add(task);
-                System.out.println("Added: " + task);
+                try {
+                    list.addDeadline(desc, by);
+                    System.out.println("Added: " + list.get(list.size()) + "\n");
+                } catch (java.io.IOException ioe) {
+                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
+                }
                 break;
             }
             case "event": {
@@ -151,13 +153,20 @@ public class Locky {
                 if (start.isEmpty()) throw new LockyException("Event start time cannot be empty after /from.");
                 if (end.isEmpty())   throw new LockyException("Event end time cannot be empty after /to.");
 
-                Event task = new Event(desc, false, start, end);
-                list.add(task);
-                System.out.println("Added: " + task);
+                try {
+                    list.addEvent(desc, start, end);
+                    System.out.println("Added: " + list.get(list.size()) + "\n");
+                } catch (java.io.IOException ioe) {
+                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
+                }
                 break;
             }
             default:
                 throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark");
         }
+    }
+
+    public static void main(String[] args) {
+        new Locky("./data/locky.txt").run();
     }
 }
