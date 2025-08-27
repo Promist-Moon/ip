@@ -1,26 +1,33 @@
 import java.util.Objects;
 import java.util.Scanner;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Main entry point and controller for the Locky chatbot.
+ */
 public class Locky {
-    private static final Pattern DEADLINE_RE = Pattern.compile("^(.+?)\\s*/by\\s+(.+)$");
-    private static final Pattern EVENT_RE    = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
-
     private final TaskList list;
     private final Scanner scanner;
 
+    /**
+     * Creates a new Locky instance using the specified file path
+     * for persistent storage of tasks.
+     *
+     * @param filePath the file path where tasks are stored and loaded.
+     */
     public Locky(String filePath) {
         Storage storage = new Storage(filePath);
         this.list = new TaskList(storage);
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Starts the interactive chatbot loop.
+     * Prints  welcome message and continues reading user input until
+     * the bye command is received. Each line is parsed and handled
+     * as a task-related command.
+     */
     public void run() {
         String divider = "____________________________________________________________\n";
         String logo = "     __________\n" +
@@ -69,13 +76,19 @@ public class Locky {
         scanner.close();
     }
 
+    /**
+     * Handles a single line of user input.
+     * Delegates parsing to Parser, and depending on the command
+     * manipulates the task list accordingly (add, delete, mark, unmark, etc.).
+     * Prints output for the user.
+     *
+     * @param taskString the raw user input line.
+     * @throws LockyException if the command or its arguments are invalid.
+     */
     private void handleLine(String taskString) throws LockyException {
-        String trimmed = taskString == null ? "" : taskString.trim();
-        if (trimmed.isEmpty()) throw new LockyException("Say something? (try: todo … / deadline … / event …)");
-
-        String[] split = trimmed.split("\\s+", 2);
-        String cmd  = split[0].toLowerCase();
-        String args = split.length > 1 ? split[1].trim() : "";
+        Parser.ParsedCommand pc = Parser.parseCommandLine(taskString);
+        String cmd  = pc.command();
+        String args = pc.args();
 
         switch (cmd) {
             case "list": {
@@ -85,7 +98,9 @@ public class Locky {
             case "delete":
             case "mark":
             case "unmark": {
-                if (args.isEmpty()) throw new LockyException("Which task number to " + cmd + "? e.g., \"" + cmd + " 2\"");
+                if (args.isEmpty()) {
+                    throw new LockyException("Which task number to " + cmd + "? e.g., \"" + cmd + " 2\"");
+                }
                 int taskNumber;
                 try {
                     taskNumber = Integer.parseInt(args);
@@ -115,7 +130,9 @@ public class Locky {
                 break;
             }
             case "todo": {
-                if (args.isEmpty()) throw new LockyException("Todo needs a description. Try: \"todo buy milk\"");
+                if (args.isEmpty()) {
+                    throw new LockyException("Todo needs a description. Try: \"todo buy milk\"");
+                }
                 try {
                     list.addTodo(args);
                     System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
@@ -125,21 +142,10 @@ public class Locky {
                 break;
             }
             case "deadline": {
-                if (args.isEmpty()) throw new LockyException("Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by Mon 2359\"");
-                Matcher m = DEADLINE_RE.matcher(args);
-                if (!m.matches()) {
-                    if (!args.contains("/by")) throw new LockyException("Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
-                    throw new LockyException("Bad deadline format. Use: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
-                }
-                String desc = m.group(1).trim();
-                String by   = m.group(2).trim();
-                if (desc.isEmpty()) throw new LockyException("Deadline description cannot be empty.");
-                if (by.isEmpty())   throw new LockyException("Deadline time cannot be empty after /by.");
+                Parser.ParsedDeadline pd = Parser.parseDeadlineArgs(args);
 
                 try {
-                    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                    LocalDateTime deadline = LocalDateTime.parse(by, fmt);
-                    list.addDeadline(desc, deadline);
+                    list.addDeadline(pd.description(), pd.by());
                     System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
                 } catch (DateTimeParseException dpe) {
                     throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
@@ -149,25 +155,9 @@ public class Locky {
                 break;
             }
             case "event": {
-                if (args.isEmpty()) throw new LockyException("Event needs \"description /from start /to end\".");
-                Matcher m = EVENT_RE.matcher(args);
-                if (!m.matches()) {
-                    if (!args.contains("/from")) throw new LockyException("Missing \"/from\". Format: \"event <desc> /from <start> /to <end>\"");
-                    if (!args.contains("/to"))   throw new LockyException("Missing \"/to\". Format: \"event <desc> /from <start> /to <end>\"");
-                    throw new LockyException("Bad event format. Use: \"event <desc> /from <start> /to <end>\"");
-                }
-                String desc  = m.group(1).trim();
-                String start = m.group(2).trim();
-                String end   = m.group(3).trim();
-                if (desc.isEmpty())  throw new LockyException("Event description cannot be empty.");
-                if (start.isEmpty()) throw new LockyException("Event start time cannot be empty after /from.");
-                if (end.isEmpty())   throw new LockyException("Event end time cannot be empty after /to.");
-
+                Parser.ParsedEvent pe = Parser.parseEventArgs(args);
                 try {
-                    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
-                    LocalDateTime startTime = LocalDateTime.parse(start, fmt);
-                    LocalDateTime endTime = LocalDateTime.parse(end, fmt);
-                    list.addEvent(desc, startTime, endTime);
+                    list.addEvent(pe.description(), pe.start(), pe.end());
                     System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
                 } catch (DateTimeParseException dpe) {
                     throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
@@ -181,6 +171,14 @@ public class Locky {
         }
     }
 
+    /**
+     * Entry point of the application.
+     * <p>
+     * Creates a {@code Locky} instance with {@code ./data/locky.txt}
+     * as the storage file and starts the chatbot loop.
+     *
+     * @param args command-line arguments (not used).
+     */
     public static void main(String[] args) {
         new Locky("./data/locky.txt").run();
     }
