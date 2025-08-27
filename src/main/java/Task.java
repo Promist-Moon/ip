@@ -1,7 +1,19 @@
+/**
+ * Represents a generic task with a description and a completion status.
+ * This class serves as a parent class for the other subclasses of
+ * tasks: {@code Todo}, {@code Deadline}, and {@code Event}.
+ */
 public class Task {
     String description;
     boolean isDone;
 
+    /**
+     * Creates new task object with description and completion
+     * status.
+     *
+     * @param description text description of task.
+     * @param isDone whether the task is marked as completed.
+     */
     public Task(String description, boolean isDone) {
         this.description = description;
         this.isDone = isDone;
