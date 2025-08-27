@@ -1,7 +1,9 @@
+package locky.tasks;
+
 /**
  * Represents a generic task with a description and a completion status.
  * This class serves as a parent class for the other subclasses of
- * tasks: {@code Todo}, {@code Deadline}, and {@code Event}.
+ * tasks: {@code Locky.tasks.Todo}, {@code Locky.tasks.Deadline}, and {@code Locky.tasks.Event}.
  */
 public class Task {
     String description;

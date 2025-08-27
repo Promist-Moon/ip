@@ -1,3 +1,7 @@
+package locky.tasks;
+
+import locky.utils.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -27,7 +31,7 @@ public class Deadline extends Task {
 
     /**
      * Returns deadline formatted as a string in
-     * DateTimeFormat's DISPLAY format.
+     * Locky.utils.DateTimeFormat's DISPLAY format.
      *
      * @return formatted deadline
      */

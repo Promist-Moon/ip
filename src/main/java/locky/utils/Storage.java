@@ -1,3 +1,10 @@
+package locky.utils;
+
+import locky.tasks.Deadline;
+import locky.tasks.Event;
+import locky.tasks.Task;
+import locky.tasks.Todo;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -29,7 +36,7 @@ public class Storage {
     private final File file;
 
     /**
-     * Creates a new {@code Storage} instance that will read from and
+     * Creates a new {@code Locky.utils.Storage} instance that will read from and
      * write to the given file path.
      *
      * @param path path to the file used for persistent storage.
@@ -40,7 +47,7 @@ public class Storage {
 
     /**
      * Loads tasks from the storage file into memory.
-     * Each line in the file is parsed into a corresponding {@code Task}
+     * Each line in the file is parsed into a corresponding {@code Locky.tasks.Task}
      * object.
      * If the file does not exist, an empty list is returned.
      *
@@ -94,7 +101,7 @@ public class Storage {
     }
 
     /**
-     * Converts a {@code Task} object into its string representation
+     * Converts a {@code Locky.tasks.Task} object into its string representation
      * suitable for saving to disk.
      *
      * @param t the task to be serialized.
@@ -125,7 +132,7 @@ public class Storage {
 
     /**
      * Parses a serialized line from the storage file back into a
-     * corresponding {@code Task} object.
+     * corresponding {@code Locky.tasks.Task} object.
      *
      * @param line the line of text to be parsed.
      * @return the reconstructed task, or null if the line

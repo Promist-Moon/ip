@@ -1,3 +1,7 @@
+package locky.tasks;
+
+import locky.utils.DateTimeFormat;
+
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -10,7 +14,7 @@ public class Event extends Task {
     private final LocalDateTime end;
 
     /**
-     * Creates a new {@code Event} task with the given description, completion
+     * Creates a new {@code Locky.tasks.Event} task with the given description, completion
      * status, start time, and end time.
      *
      * @param description the text description of the event.
@@ -25,7 +29,7 @@ public class Event extends Task {
         this.start = Objects.requireNonNull(start, "start");
         this.end   = Objects.requireNonNull(end, "end");
         if (!end.isAfter(start)) {
-            throw new IllegalArgumentException("Event end must be after start.");
+            throw new IllegalArgumentException("Locky.tasks.Event end must be after start.");
         }
     }
 

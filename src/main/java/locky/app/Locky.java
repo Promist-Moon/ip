@@ -1,7 +1,14 @@
+package locky.app;
+
 import java.util.Objects;
 import java.util.Scanner;
 
 import java.time.format.DateTimeParseException;
+
+import locky.tasks.*;
+import locky.utils.Storage;
+import locky.utils.Parser;
+import locky.error.LockyException;
 
 /**
  * Main entry point and controller for the Locky chatbot.
@@ -11,7 +18,7 @@ public class Locky {
     private final Scanner scanner;
 
     /**
-     * Creates a new Locky instance using the specified file path
+     * Creates a new Locky.app.Locky instance using the specified file path
      * for persistent storage of tasks.
      *
      * @param filePath the file path where tasks are stored and loaded.
@@ -78,7 +85,7 @@ public class Locky {
 
     /**
      * Handles a single line of user input.
-     * Delegates parsing to Parser, and depending on the command
+     * Delegates parsing to Locky.utils.Parser, and depending on the command
      * manipulates the task list accordingly (add, delete, mark, unmark, etc.).
      * Prints output for the user.
      *
@@ -174,7 +181,7 @@ public class Locky {
     /**
      * Entry point of the application.
      * <p>
-     * Creates a {@code Locky} instance with {@code ./data/locky.txt}
+     * Creates a {@code Locky.app.Locky} instance with {@code ./data/locky.txt}
      * as the storage file and starts the chatbot loop.
      *
      * @param args command-line arguments (not used).

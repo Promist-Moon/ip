@@ -1,13 +1,17 @@
+package locky.tasks;
+
+import locky.utils.Storage;
+import locky.error.LockyException;
+
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import java.time.LocalDateTime;
 
 /**
  * Represents an in-memory list of tasks that can be modified and persisted.
- * The {@code TaskList} class manages a collection of tasks, including
- * {@code Todo}, {@code Deadline}, and {@code Event}. It supports adding,
+ * The {@code Locky.tasks.TaskList} class manages a collection of tasks, including
+ * {@code Locky.tasks.Todo}, {@code Locky.tasks.Deadline}, and {@code Locky.tasks.Event}. It supports adding,
  * retrieving, marking, unmarking, deleting, and printing tasks. Changes
  * are saved automatically to the associated {@link Storage} object.
  */
@@ -15,13 +19,12 @@ public class TaskList {
     private final ArrayList<Task> tasks;
     private final Storage storage;
 
-
     /**
-     * Creates a new TaskList backed by the given storage.
+     * Creates a new Locky.tasks.TaskList backed by the given storage.
      * Attempts to load existing tasks from the storage file. If the file
      * cannot be read, an empty task list is created instead.
      *
-     * @param storage the Storage object used to load and save tasks.
+     * @param storage the Locky.utils.Storage object used to load and save tasks.
      */
     public TaskList(Storage storage) {
         this.storage = storage;

@@ -1,3 +1,5 @@
+package locky.utils;
+
 import java.time.format.DateTimeFormatter;
 
 /**

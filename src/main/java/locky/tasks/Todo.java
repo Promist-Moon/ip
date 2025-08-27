@@ -1,3 +1,5 @@
+package locky.tasks;
+
 /**
  * Represents a todo task with no datetime object
  */
