@@ -20,12 +20,16 @@ Added: [T][ ] make brownies
 
 ____________________________________________________________
 
-Added: [D][ ] send in 2103T by: 4 30pm
+Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)
+
+____________________________________________________________
+
+Added: [D][ ] send in 2103T by: Aug 29 2025, 4:30pm
 
 ____________________________________________________________
 
 1. [T][ ] make brownies
-2. [D][ ] send in 2103T by: 4 30pm
+2. [D][ ] send in 2103T by: Aug 29 2025, 4:30pm
 
 ____________________________________________________________
 
@@ -34,7 +38,7 @@ Which task number to mark? e.g., "mark 2"
 ____________________________________________________________
 
 Locked In! Task marked as completed:
-[D][X] send in 2103T by: 4 30pm
+[D][X] send in 2103T by: Aug 29 2025, 4:30pm
 
 ____________________________________________________________
 
@@ -43,11 +47,15 @@ Not a number: "two". Try "mark 2".
 ____________________________________________________________
 
 1. [T][ ] make brownies
-2. [D][X] send in 2103T by: 4 30pm
+2. [D][X] send in 2103T by: Aug 29 2025, 4:30pm
 
 ____________________________________________________________
 
-Added: [E][ ] project meeting from: Mon 2pm to: 4pm
+Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)
+
+____________________________________________________________
+
+Added: [E][ ] project meeting from: May 15 2025, 2:00pm to: May 15 2025, 4:00pm
 
 ____________________________________________________________
 
@@ -59,7 +67,7 @@ Todo needs a description. Try: "todo buy milk"
 
 ____________________________________________________________
 
-Missing "/by". Format: "deadline <desc> /by <when>"
+Missing "/by". Format: "deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)"
 
 ____________________________________________________________
 
@@ -72,12 +80,12 @@ Which task number to delete? e.g., "delete 2"
 ____________________________________________________________
 
 Ok, so let's just forget that task existed...
-[D][X] send in 2103T by: 4 30pm
+[D][X] send in 2103T by: Aug 29 2025, 4:30pm
 
 ____________________________________________________________
 
 1. [T][ ] make brownies
-2. [E][ ] project meeting from: Mon 2pm to: 4pm
+2. [E][ ] project meeting from: May 15 2025, 2:00pm to: May 15 2025, 4:00pm
 
 ____________________________________________________________
 You better Lock In!

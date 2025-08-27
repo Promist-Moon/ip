@@ -4,6 +4,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
 public class Locky {
     private static final Pattern DEADLINE_RE = Pattern.compile("^(.+?)\\s*/by\\s+(.+)$");
     private static final Pattern EVENT_RE    = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
@@ -75,7 +79,7 @@ public class Locky {
 
         switch (cmd) {
             case "list": {
-                System.out.println(list.printableList());
+                System.out.println(list.printList());
                 break;
             }
             case "delete":
@@ -91,12 +95,12 @@ public class Locky {
                 try {
                     Task t;
                     if (cmd.equals("mark")) {
-                        boolean wasDone = list.get(taskNumber).getDone();
+                        boolean wasDone = list.getTask(taskNumber).getDone();
                         t = list.mark(taskNumber);
                         System.out.println((wasDone ? "You locked in once you don't have to do this again" :
                                 "Locked In! Task marked as completed:"));
                     } else if (cmd.equals("unmark")) {
-                        boolean wasDone = list.get(taskNumber).getDone();
+                        boolean wasDone = list.getTask(taskNumber).getDone();
                         t = list.unmark(taskNumber);
                         System.out.println((!wasDone ? "Oh.... it's still not done." :
                                 "Ok, undone. Back to work!"));
@@ -114,7 +118,7 @@ public class Locky {
                 if (args.isEmpty()) throw new LockyException("Todo needs a description. Try: \"todo buy milk\"");
                 try {
                     list.addTodo(args);
-                    System.out.println("Added: " + list.get(list.size()) + "\n");
+                    System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
                 } catch (java.io.IOException ioe) {
                     System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
                 }
@@ -124,8 +128,8 @@ public class Locky {
                 if (args.isEmpty()) throw new LockyException("Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by Mon 2359\"");
                 Matcher m = DEADLINE_RE.matcher(args);
                 if (!m.matches()) {
-                    if (!args.contains("/by")) throw new LockyException("Missing \"/by\". Format: \"deadline <desc> /by <when>\"");
-                    throw new LockyException("Bad deadline format. Use: \"deadline <desc> /by <when>\"");
+                    if (!args.contains("/by")) throw new LockyException("Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
+                    throw new LockyException("Bad deadline format. Use: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
                 }
                 String desc = m.group(1).trim();
                 String by   = m.group(2).trim();
@@ -133,8 +137,12 @@ public class Locky {
                 if (by.isEmpty())   throw new LockyException("Deadline time cannot be empty after /by.");
 
                 try {
-                    list.addDeadline(desc, by);
-                    System.out.println("Added: " + list.get(list.size()) + "\n");
+                    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                    LocalDateTime deadline = LocalDateTime.parse(by, fmt);
+                    list.addDeadline(desc, deadline);
+                    System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
+                } catch (DateTimeParseException dpe) {
+                    throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
                 } catch (java.io.IOException ioe) {
                     System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
                 }
@@ -156,8 +164,13 @@ public class Locky {
                 if (end.isEmpty())   throw new LockyException("Event end time cannot be empty after /to.");
 
                 try {
-                    list.addEvent(desc, start, end);
-                    System.out.println("Added: " + list.get(list.size()) + "\n");
+                    DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+                    LocalDateTime startTime = LocalDateTime.parse(start, fmt);
+                    LocalDateTime endTime = LocalDateTime.parse(end, fmt);
+                    list.addEvent(desc, startTime, endTime);
+                    System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
+                } catch (DateTimeParseException dpe) {
+                    throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
                 } catch (java.io.IOException ioe) {
                     System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
                 }
