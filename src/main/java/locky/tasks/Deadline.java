@@ -29,6 +29,10 @@ public class Deadline extends Task {
         return "[D]" + super.toString() + " by: " + getDeadlineFormatted();
     }
 
+    public LocalDateTime getDeadline() {
+        return this.deadline;
+    }
+
     /**
      * Returns deadline formatted as a string in
      * Locky.utils.DateTimeFormat's DISPLAY format.

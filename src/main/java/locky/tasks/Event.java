@@ -38,6 +38,13 @@ public class Event extends Task {
         return "[E]" + super.toString() + " from: " + getStartFormatted() + " to: " + getEndFormatted();
     }
 
+    public LocalDateTime getStart() {
+        return this.start;
+    }
+
+    public LocalDateTime getEnd() {
+        return this.end;
+    }
 
     /**
      * Returns the event's start time formatted for display.
