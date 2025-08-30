@@ -9,6 +9,9 @@ import java.time.format.DateTimeFormatter;
 public final class DateTimeFormat {
     private DateTimeFormat() {}
 
+    public static final DateTimeFormatter INPUT =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
+
     public static final DateTimeFormatter DISPLAY =
             DateTimeFormatter.ofPattern("MMM dd uuuu, h:mma");
 }

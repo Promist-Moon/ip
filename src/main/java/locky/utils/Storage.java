@@ -26,10 +26,8 @@ import java.util.List;
  * Handles persistent storage of tasks to and from a text file.
  */
 public class Storage {
-    private static final DateTimeFormatter STORAGE_FMT =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
     private static final List<DateTimeFormatter> ACCEPTED_INPUT_FORMATS = List.of(
-            STORAGE_FMT,
+            DateTimeFormat.INPUT,
             DateTimeFormatter.ISO_LOCAL_DATE_TIME,
             DateTimeFormat.DISPLAY
     );
@@ -189,6 +187,6 @@ public class Storage {
             }
         }
         throw new IllegalArgumentException("Unrecognized datetime: \"" + raw
-                + "\". Expected formats like \"" + STORAGE_FMT.toString() + "\" or ISO-8601.");
+                + "\". Expected formats like \"" + DateTimeFormat.INPUT.toString() + "\" or ISO-8601.");
     }
 }

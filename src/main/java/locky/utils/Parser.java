@@ -3,7 +3,6 @@ package locky.utils;
 import locky.error.LockyException;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -22,9 +21,6 @@ public final class Parser {
     // regex for command arguments
     private static final Pattern DEADLINE_RE = Pattern.compile("^(.+?)\\s*/by\\s+(.+)$");
     private static final Pattern EVENT_RE    = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
-
-    // input format
-    private static final DateTimeFormatter INPUT_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd HHmm");
 
     /**
      * Parses a raw input line into a command and its argument string.
@@ -58,7 +54,7 @@ public final class Parser {
      */
     public static ParsedDeadline parseDeadlineArgs(String args) throws LockyException {
         if (args.isEmpty()) {
-            throw new LockyException("Locky.tasks.Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2019-12-02 1800\"");
+            throw new LockyException("Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2019-12-02 1800\"");
         }
         Matcher m = DEADLINE_RE.matcher(args);
         if (!m.matches()) {
@@ -71,14 +67,14 @@ public final class Parser {
         String desc = m.group(1).trim();
         String by   = m.group(2).trim();
         if (desc.isEmpty()) {
-            throw new LockyException("Locky.tasks.Deadline description cannot be empty.");
+            throw new LockyException("Deadline description cannot be empty.");
         }
         if (by.isEmpty()) {
-            throw new LockyException("Locky.tasks.Deadline time cannot be empty after /by.");
+            throw new LockyException("Deadline time cannot be empty after /by.");
         }
 
         try {
-            LocalDateTime dt = LocalDateTime.parse(by, INPUT_FMT);
+            LocalDateTime dt = LocalDateTime.parse(by, DateTimeFormat.INPUT);
             return new ParsedDeadline(desc, dt);
         } catch (DateTimeParseException dpe) {
             throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
@@ -126,8 +122,8 @@ public final class Parser {
         }
 
         try {
-            LocalDateTime startDt = LocalDateTime.parse(start, INPUT_FMT);
-            LocalDateTime endDt   = LocalDateTime.parse(end,   INPUT_FMT);
+            LocalDateTime startDt = LocalDateTime.parse(start, DateTimeFormat.INPUT);
+            LocalDateTime endDt   = LocalDateTime.parse(end,   DateTimeFormat.INPUT);
             if (!endDt.isAfter(startDt)) {
                 throw new LockyException("Locky.tasks.Event end must be after start.");
             }
