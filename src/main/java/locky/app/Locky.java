@@ -98,83 +98,83 @@ public class Locky {
         String args = pc.args();
 
         switch (cmd) {
-            case "list": {
-                System.out.println(list.printList());
-                break;
+        case "list": {
+            System.out.println(list.printList());
+            break;
+        }
+        case "delete":
+        case "mark":
+        case "unmark": {
+            if (args.isEmpty()) {
+                throw new LockyException("Which task number to " + cmd + "? e.g., \"" + cmd + " 2\"");
             }
-            case "delete":
-            case "mark":
-            case "unmark": {
-                if (args.isEmpty()) {
-                    throw new LockyException("Which task number to " + cmd + "? e.g., \"" + cmd + " 2\"");
-                }
-                int taskNumber;
-                try {
-                    taskNumber = Integer.parseInt(args);
-                } catch (NumberFormatException e) {
-                    throw new LockyException("Not a number: \"" + args + "\". Try \"" + cmd + " 2\".");
-                }
-                try {
-                    Task t;
-                    if (cmd.equals("mark")) {
-                        boolean wasDone = list.getTask(taskNumber).getDone();
-                        t = list.mark(taskNumber);
-                        System.out.println((wasDone ? "You locked in once you don't have to do this again" :
-                                "Locked In! Task marked as completed:"));
-                    } else if (cmd.equals("unmark")) {
-                        boolean wasDone = list.getTask(taskNumber).getDone();
-                        t = list.unmark(taskNumber);
-                        System.out.println((!wasDone ? "Oh.... it's still not done." :
-                                "Ok, undone. Back to work!"));
-                    } else {
-                        t = list.delete(taskNumber);
-                        System.out.println("Ok, so let's just forget that task existed...");
-                    }
-                    System.out.println(t + "\n");
-                } catch (java.io.IOException ioe) {
-                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
-                }
-                break;
+            int taskNumber;
+            try {
+                taskNumber = Integer.parseInt(args);
+            } catch (NumberFormatException e) {
+                throw new LockyException("Not a number: \"" + args + "\". Try \"" + cmd + " 2\".");
             }
-            case "todo": {
-                if (args.isEmpty()) {
-                    throw new LockyException("Todo needs a description. Try: \"todo buy milk\"");
+            try {
+                Task t;
+                if (cmd.equals("mark")) {
+                    boolean wasDone = list.getTask(taskNumber).getDone();
+                    t = list.mark(taskNumber);
+                    System.out.println((wasDone ? "You locked in once you don't have to do this again" :
+                            "Locked In! Task marked as completed:"));
+                } else if (cmd.equals("unmark")) {
+                    boolean wasDone = list.getTask(taskNumber).getDone();
+                    t = list.unmark(taskNumber);
+                    System.out.println((!wasDone ? "Oh.... it's still not done." :
+                            "Ok, undone. Back to work!"));
+                } else {
+                    t = list.delete(taskNumber);
+                    System.out.println("Ok, so let's just forget that task existed...");
                 }
-                try {
-                    list.addTodo(args);
-                    System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
-                } catch (java.io.IOException ioe) {
-                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
-                }
-                break;
+                System.out.println(t + "\n");
+            } catch (java.io.IOException ioe) {
+                System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
             }
-            case "deadline": {
-                Parser.ParsedDeadline pd = Parser.parseDeadlineArgs(args);
+            break;
+        }
+        case "todo": {
+            if (args.isEmpty()) {
+                throw new LockyException("Todo needs a description. Try: \"todo buy milk\"");
+            }
+            try {
+                list.addTodo(args);
+                System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
+            } catch (java.io.IOException ioe) {
+                System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
+            }
+            break;
+        }
+        case "deadline": {
+            Parser.ParsedDeadline pd = Parser.parseDeadlineArgs(args);
 
-                try {
-                    list.addDeadline(pd.description(), pd.by());
-                    System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
-                } catch (DateTimeParseException dpe) {
-                    throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
-                } catch (java.io.IOException ioe) {
-                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
-                }
-                break;
+            try {
+                list.addDeadline(pd.description(), pd.by());
+                System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
+            } catch (DateTimeParseException dpe) {
+                throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
+            } catch (java.io.IOException ioe) {
+                System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
             }
-            case "event": {
-                Parser.ParsedEvent pe = Parser.parseEventArgs(args);
-                try {
-                    list.addEvent(pe.description(), pe.start(), pe.end());
-                    System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
-                } catch (DateTimeParseException dpe) {
-                    throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
-                } catch (java.io.IOException ioe) {
-                    System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
-                }
-                break;
+            break;
+        }
+        case "event": {
+            Parser.ParsedEvent pe = Parser.parseEventArgs(args);
+            try {
+                list.addEvent(pe.description(), pe.start(), pe.end());
+                System.out.println("Added: " + list.getTask(list.getSize()) + "\n");
+            } catch (DateTimeParseException dpe) {
+                throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
+            } catch (java.io.IOException ioe) {
+                System.out.println("(Warning: failed to save: " + ioe.getMessage() + ")\n");
             }
-            default:
-                throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark");
+            break;
+        }
+        default:
+            throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark");
         }
     }
 

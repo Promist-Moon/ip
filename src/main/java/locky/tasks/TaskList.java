@@ -4,9 +4,10 @@ import locky.utils.Storage;
 import locky.error.LockyException;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import java.time.LocalDateTime;
+
+import java.util.ArrayList;
 
 /**
  * Represents an in-memory list of tasks that can be modified and persisted.
