@@ -1,16 +1,23 @@
 package locky.utils;
 
-import locky.tasks.Task;
-import locky.tasks.Todo;
-import locky.tasks.Deadline;
-import locky.tasks.Event;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertInstanceOf;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+import locky.tasks.Deadline;
+import locky.tasks.Event;
+import locky.tasks.Task;
+import locky.tasks.Todo;
 
 class StorageTest {
 
@@ -28,7 +35,9 @@ class StorageTest {
             return (Task) m.invoke(s, line);
         } catch (InvocationTargetException ite) {
             Throwable c = ite.getCause();
-            if (c instanceof RuntimeException re) throw re;
+            if (c instanceof RuntimeException re) {
+                throw re;
+            }
             throw ite;
         }
     }
@@ -36,12 +45,11 @@ class StorageTest {
     @Test
     public void parseLine_validTodo_parsed() throws Exception {
         Storage s = new Storage("unused.txt");
-        Task t = parseLine(s, "T|0|buy milk");
+        Task t = parseLine(s, "T|0|fish band prac");
         assertNotNull(t);
         assertTrue(t instanceof Todo);
-        Todo todo = (Todo) t;
-        assertEquals("buy milk", todo.getDescription());
-        assertFalse(todo.getDone());
+        assertEquals("fish band prac", t.getDescription());
+        assertFalse(t.getDone());
     }
 
     @Test
@@ -53,7 +61,7 @@ class StorageTest {
         Deadline d = (Deadline) t;
         assertEquals("submit report", d.getDescription());
         assertTrue(d.getDone());
-        assertEquals(LocalDateTime.of(2019,12,2,18,0), d.getDeadline());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 18, 0), d.getDeadline());
     }
 
     @Test
@@ -65,8 +73,8 @@ class StorageTest {
         Event e = (Event) t;
         assertEquals("team sync", e.getDescription());
         assertFalse(e.getDone());
-        assertEquals(LocalDateTime.of(2019,12,2,9,0),  e.getStart());
-        assertEquals(LocalDateTime.of(2019,12,2,10,0), e.getEnd());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 9, 0), e.getStart());
+        assertEquals(LocalDateTime.of(2019, 12, 2, 10, 0), e.getEnd());
     }
 
     @Test
@@ -86,16 +94,13 @@ class StorageTest {
     @Test
     void parseLine_badDateInDeadline_throwsIllegalArgumentException() {
         Storage s = new Storage("unused.txt");
-        assertThrows(IllegalArgumentException.class,
-                () -> parseLine(s, "D|0|bad date ex|12/02/2019 6pm"));
+        assertThrows(IllegalArgumentException.class, () -> parseLine(s, "D|0|bad date ex|12/02/2019 6pm"));
     }
 
     @Test
     void parseLine_badDateInEventStartOrEnd_throwsIllegalArgumentException() {
         Storage s = new Storage("unused.txt");
-        assertThrows(IllegalArgumentException.class,
-                () -> parseLine(s, "E|0|mtg|2019/12/02 09:00|2019-12-02 1000"));
-        assertThrows(IllegalArgumentException.class,
-                () -> parseLine(s, "E|0|mtg|2019-12-02 0900|02-12-2019 10:00"));
+        assertThrows(IllegalArgumentException.class, () -> parseLine(s, "E|0|mtg|2019/12/02 09:00|2019-12-02 1000"));
+        assertThrows(IllegalArgumentException.class, () -> parseLine(s, "E|0|mtg|2019-12-02 0900|02-12-2019 10:00"));
     }
 }

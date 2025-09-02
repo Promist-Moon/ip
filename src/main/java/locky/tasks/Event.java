@@ -1,10 +1,9 @@
 package locky.tasks;
 
-import locky.utils.DateTimeFormat;
-
 import java.time.LocalDateTime;
-
 import java.util.Objects;
+
+import locky.utils.DateTimeFormat;
 
 /**
  * Represents an event task with a start and end datetime

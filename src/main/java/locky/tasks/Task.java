@@ -6,8 +6,8 @@ package locky.tasks;
  * tasks: {@code Locky.tasks.Todo}, {@code Locky.tasks.Deadline}, and {@code Locky.tasks.Event}.
  */
 public class Task {
-    String description;
-    boolean isDone;
+    private final String description;
+    private boolean isDone;
 
     /**
      * Creates new task object with description and completion

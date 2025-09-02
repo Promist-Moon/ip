@@ -1,14 +1,15 @@
 package locky.app;
 
+import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
 
-import java.time.format.DateTimeParseException;
-
-import locky.tasks.*;
-import locky.utils.Storage;
-import locky.utils.Parser;
 import locky.error.LockyException;
+import locky.tasks.Task;
+import locky.tasks.TaskList;
+import locky.utils.Parser;
+import locky.utils.Storage;
 
 /**
  * Main entry point and controller for the Locky chatbot.
@@ -37,21 +38,21 @@ public class Locky {
      */
     public void run() {
         String divider = "____________________________________________________________\n";
-        String logo = "     __________\n" +
-                "    / .------. \\\n" +
-                "   / /        \\ \\\n" +
-                "  _| |________| |_\n" +
-                ".' |_|        |_| '.\n" +
-                "'._____ ____ _____.'\n" +
-                "|     .'    '.     |\n" +
-                "'.  .'.      .'.  .'\n" +
-                "'       LOCKY      '\n" +
-                "|   '. .    . .'   |\n" +
-                "'.________________.'\n";
+        String logo = "     __________\n"
+                + "    / .------. \\\n"
+                + "   / /        \\ \\\n"
+                + "  _| |________| |_\n"
+                + ".' |_|        |_| '.\n"
+                + "'._____ ____ _____.'\n"
+                + "|     .'    '.     |\n"
+                + "'.  .'.      .'.  .'\n"
+                + "'       LOCKY      '\n"
+                + "|   '. .    . .'   |\n"
+                + "'.________________.'\n";
         String intro = divider
-        + "Hello! I'm Locky\n"
-        + "Reminding you to Lock In!\n"
-        + "What can I do for you?\n";
+            + "Hello! I'm Locky\n"
+            + "Reminding you to Lock In!\n"
+            + "What can I do for you?\n";
 
         System.out.println(logo + intro);
 
@@ -94,7 +95,7 @@ public class Locky {
      */
     private void handleLine(String taskString) throws LockyException {
         Parser.ParsedCommand pc = Parser.parseCommandLine(taskString);
-        String cmd  = pc.command();
+        String cmd = pc.command();
         String args = pc.args();
 
         switch (cmd) {
@@ -119,13 +120,13 @@ public class Locky {
                 if (cmd.equals("mark")) {
                     boolean wasDone = list.getTask(taskNumber).getDone();
                     t = list.mark(taskNumber);
-                    System.out.println((wasDone ? "You locked in once you don't have to do this again" :
-                            "Locked In! Task marked as completed:"));
+                    System.out.println((wasDone ? "You locked in once you don't have to do this again"
+                            : "Locked In! Task marked as completed:"));
                 } else if (cmd.equals("unmark")) {
                     boolean wasDone = list.getTask(taskNumber).getDone();
                     t = list.unmark(taskNumber);
-                    System.out.println((!wasDone ? "Oh.... it's still not done." :
-                            "Ok, undone. Back to work!"));
+                    System.out.println((!wasDone ? "Oh.... it's still not done."
+                            : "Ok, undone. Back to work!"));
                 } else {
                     t = list.delete(taskNumber);
                     System.out.println("Ok, so let's just forget that task existed...");
@@ -173,8 +174,27 @@ public class Locky {
             }
             break;
         }
+        case "find": {
+            if (args.isEmpty()) {
+                throw new LockyException("Find needs a description. Try: \"find milk\"");
+            }
+            try {
+                ArrayList<Task> matches = list.find(args);
+                if (matches.isEmpty()) {
+                    System.out.println("No matching tasks found.");
+                } else {
+                    System.out.println("Matching tasks:");
+                    for (int i = 0; i < matches.size(); i++) {
+                        System.out.println((i + 1) + ". " + matches.get(i));
+                    }
+                }
+            } catch (Exception e) {
+                System.out.println("Error while finding tasks: " + e.getMessage());
+            }
+            break;
+        }
         default:
-            throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark");
+            throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark | find");
         }
     }
 

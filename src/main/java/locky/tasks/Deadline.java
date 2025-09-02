@@ -1,10 +1,9 @@
 package locky.tasks;
 
-import locky.utils.DateTimeFormat;
-
 import java.time.LocalDateTime;
-
 import java.util.Objects;
+
+import locky.utils.DateTimeFormat;
 
 /**
  * Represents a deadline task with a specific due date and time.
