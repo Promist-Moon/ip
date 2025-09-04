@@ -30,11 +30,16 @@ public class Locky {
         this.scanner = new Scanner(System.in);
     }
 
-    public String getResponse(String input) {
-        String divider = "____________________________________________________________\n";
+    public String getGreeting() {
+        String intro = "Hello! I'm Locky\n"
+                + "Reminding you to Lock In!\n"
+                + "What can I do for you?\n";
+        return intro;
+    }
 
+    public String getResponse(String input) {
         if (Objects.equals(input, "bye")) {
-            return divider + "You better Lock In!\n" + divider;
+            return "You better Lock In!\n";
         }
 
         try {

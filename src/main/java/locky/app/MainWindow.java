@@ -33,6 +33,9 @@ public class MainWindow extends AnchorPane {
     /** Injects the Locky instance */
     public void setLocky(Locky l) {
         locky = l;
+        dialogContainer.getChildren().add(
+                DialogBox.getLockyDialog(locky.getGreeting(), lockyImage)
+        );
     }
 
     /**
