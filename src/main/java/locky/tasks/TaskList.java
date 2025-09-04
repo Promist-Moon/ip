@@ -146,6 +146,26 @@ public class TaskList {
     }
 
     /**
+     * Finds a list of tasks with descriptions
+     * matching the given keyword.
+     *
+     * @param keyword String matcher
+     * @return ArrayList of tasks containing keyword
+     * in description
+     */
+    public ArrayList<Task> find(String keyword) {
+        ArrayList<Task> results = new ArrayList<>();
+        String key = keyword.trim().toLowerCase();
+        for (Task t : tasks) {
+            if (t.getDescription() != null &&
+                    t.getDescription().toLowerCase().contains(key)) {
+                results.add(t);
+            }
+        }
+        return results;
+    }
+
+    /**
      * Saves the current task list to persistent storage.
      *
      * @throws IOException if an I/O error occurs during saving.

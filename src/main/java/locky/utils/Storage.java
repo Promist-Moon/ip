@@ -1,9 +1,5 @@
 package locky.utils;
 
-import locky.tasks.Deadline;
-import locky.tasks.Event;
-import locky.tasks.Task;
-import locky.tasks.Todo;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -11,16 +7,18 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-
 import java.nio.file.Files;
 import java.nio.file.Path;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-
 import java.util.ArrayList;
 import java.util.List;
+
+import locky.tasks.Deadline;
+import locky.tasks.Event;
+import locky.tasks.Task;
+import locky.tasks.Todo;
 
 /**
  * Handles persistent storage of tasks to and from a text file.
@@ -61,7 +59,9 @@ public class Storage {
             String line;
             while ((line = br.readLine()) != null) {
                 Task t = parseLine(line);
-                if (t != null) list.add(t);
+                if (t != null) {
+                    list.add(t);
+                }
             }
         }
         return list;
@@ -138,31 +138,37 @@ public class Storage {
      */
     private Task parseLine(String line) {
         String[] p = line.split("\\|");
-        if (p.length < 3) return null;
+        if (p.length < 3) {
+            return null;
+        }
 
         String type = p[0];
         boolean done = "1".equals(p[1]);
         String desc = p[2];
 
         switch (type) {
-            case "T":
-                return new Todo(desc, done);
+        case "T":
+            return new Todo(desc, done);
 
-            case "D": {
-                if (p.length < 4) return null;
-                LocalDateTime by = parseDateFlexible(p[3]);
-                return new Deadline(desc, done, by);
-            }
-
-            case "E": {
-                if (p.length < 5) return null;
-                LocalDateTime start = parseDateFlexible(p[3]);
-                LocalDateTime end   = parseDateFlexible(p[4]);
-                return new Event(desc, done, start, end);
-            }
-
-            default:
+        case "D": {
+            if (p.length < 4) {
                 return null;
+            }
+            LocalDateTime by = parseDateFlexible(p[3]);
+            return new Deadline(desc, done, by);
+        }
+
+        case "E": {
+            if (p.length < 5) {
+                return null;
+            }
+            LocalDateTime start = parseDateFlexible(p[3]);
+            LocalDateTime end = parseDateFlexible(p[4]);
+            return new Event(desc, done, start, end);
+        }
+
+        default:
+            return null;
         }
     }
 

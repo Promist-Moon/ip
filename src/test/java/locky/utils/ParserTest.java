@@ -1,19 +1,18 @@
 package locky.utils;
 
-import locky.error.LockyException;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import locky.error.LockyException;
 
 public class ParserTest {
     @Test
     public void parseCommandLine_blankInput_throwsLockyException() {
         LockyException ex = assertThrows(
-                LockyException.class,
-                () -> Parser.parseCommandLine("   ")
+                LockyException.class, () -> Parser.parseCommandLine("   ")
         );
         assertTrue(ex.getMessage().contains("Say something?"),
                 "Should prompt the user to type something");

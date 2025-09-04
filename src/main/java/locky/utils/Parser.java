@@ -1,26 +1,25 @@
 package locky.utils;
 
-import locky.error.LockyException;
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import locky.error.LockyException;
+
 /**
  * Parses user input lines into structured commands and arguments.
  * The Locky.utils.Parser centralizes regex and datetime parsing for commands like
- * creating deadline and event tasks. It validates required markers (e.g., /by,
+ * creating deadline and event tasks. It validates required markers e.g., /by,
  * /from, /to and converts date/time strings to a LocalDateTime
  * using the expected input format.
  */
 public final class Parser {
-    private Parser() {}
 
     // regex for command arguments
     private static final Pattern DEADLINE_RE = Pattern.compile("^(.+?)\\s*/by\\s+(.+)$");
-    private static final Pattern EVENT_RE    = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
+    private static final Pattern EVENT_RE = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
 
     /**
      * Parses a raw input line into a command and its argument string.
@@ -37,14 +36,14 @@ public final class Parser {
         }
 
         String[] split = s.split("\\s+", 2);
-        String cmd  = split[0].toLowerCase();
+        String cmd = split[0].toLowerCase();
         String args = split.length > 1 ? split[1].trim() : "";
         return new ParsedCommand(cmd, args);
     }
 
     /**
      * Parses {@code deadline} arguments in the form
-     * <desc> /by <yyyy-MM-dd HHmm> into a structured deadline.
+     * desc /by yyyy-MM-dd HHmm into a structured deadline.
      * Validates the presence of /by, non-empty description/time, and
      * converts the time string to a LocalDateTime.
      *
@@ -54,18 +53,21 @@ public final class Parser {
      */
     public static ParsedDeadline parseDeadlineArgs(String args) throws LockyException {
         if (args.isEmpty()) {
-            throw new LockyException("Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2019-12-02 1800\"");
+            throw new LockyException(
+                    "Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2019-12-02 1800\"");
         }
         Matcher m = DEADLINE_RE.matcher(args);
         if (!m.matches()) {
             if (!args.contains("/by")) {
-                throw new LockyException("Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
+                throw new LockyException(
+                        "Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
             }
-            throw new LockyException("Bad deadline format. Use: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
+            throw new LockyException(
+                    "Bad deadline format. Use: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
         }
 
         String desc = m.group(1).trim();
-        String by   = m.group(2).trim();
+        String by = m.group(2).trim();
         if (desc.isEmpty()) {
             throw new LockyException("Deadline description cannot be empty.");
         }
@@ -83,7 +85,7 @@ public final class Parser {
 
     /**
      * Parses {@code event} arguments in the form
-     * /from <yyyy-MM-dd HHmm> /to <yyyy-MM-dd HHmm>
+     * /from yyyy-MM-dd HHmm /to yyyy-MM-dd HHmm
      * into a structured event.
      * Validates the presence of /from and /to, ensures both times parse,
      * and checks that the end is strictly after the start.
@@ -108,9 +110,9 @@ public final class Parser {
             throw new LockyException("Bad event format. Use: \"event <desc> /from <start> /to <end>\"");
         }
 
-        String desc  = m.group(1).trim();
+        String desc = m.group(1).trim();
         String start = m.group(2).trim();
-        String end   = m.group(3).trim();
+        String end = m.group(3).trim();
         if (desc.isEmpty()) {
             throw new LockyException("Locky.tasks.Event description cannot be empty.");
         }
@@ -123,7 +125,7 @@ public final class Parser {
 
         try {
             LocalDateTime startDt = LocalDateTime.parse(start, DateTimeFormat.INPUT);
-            LocalDateTime endDt   = LocalDateTime.parse(end,   DateTimeFormat.INPUT);
+            LocalDateTime endDt = LocalDateTime.parse(end, DateTimeFormat.INPUT);
             if (!endDt.isAfter(startDt)) {
                 throw new LockyException("Locky.tasks.Event end must be after start.");
             }
