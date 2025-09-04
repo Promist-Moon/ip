@@ -7,8 +7,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 /**
- * Controller for the main GUI.
+ * Controller for the main Locky GUI.
  */
 public class MainWindow extends AnchorPane {
     @FXML
@@ -25,12 +26,17 @@ public class MainWindow extends AnchorPane {
     private Image userImage = new Image(this.getClass().getResourceAsStream("/images/User.png"));
     private Image lockyImage = new Image(this.getClass().getResourceAsStream("/images/Locky.png"));
 
+    /**
+     * Initializes the controller after the FXML elements are loaded.
+     */
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
     }
 
-    /** Injects the Locky instance */
+    /**
+     * Injects the Locky instance.
+     */
     public void setLocky(Locky l) {
         locky = l;
         dialogContainer.getChildren().add(
@@ -39,7 +45,8 @@ public class MainWindow extends AnchorPane {
     }
 
     /**
-     * Creates two dialog boxes, one echoing user input and the other containing Duke's reply and then appends them to
+     * Creates two dialog boxes, one echoing user input and the other
+     * containing Locky's reply and then appends them to
      * the dialog container. Clears the user input after processing.
      */
     @FXML

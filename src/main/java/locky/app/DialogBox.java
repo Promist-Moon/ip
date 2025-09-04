@@ -24,6 +24,11 @@ public class DialogBox extends HBox {
     @FXML
     private ImageView displayPicture;
 
+    /**
+     * Constructs a dialog box with specified message text and avatar image.
+     * @param text message to display in dialog box
+     * @param img speaker's avatar image
+     */
     private DialogBox(String text, Image img) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(MainWindow.class.getResource("/view/DialogBox.fxml"));
@@ -48,10 +53,22 @@ public class DialogBox extends HBox {
         setAlignment(Pos.TOP_LEFT);
     }
 
+    /**
+     * Creates a DialogBox for user input through factory method.
+     * @param text message to display in dialog box
+     * @param img speaker's avatar image
+     * @return DialogBox styled for Locky's responses
+     */
     public static DialogBox getUserDialog(String text, Image img) {
         return new DialogBox(text, img);
     }
 
+    /**
+     * Creates a DialogBox for Locky's responses through factory method.
+     * @param text message to display in dialog box
+     * @param img speaker's avatar image
+     * @return DialogBox styled for Locky's responses
+     */
     public static DialogBox getLockyDialog(String text, Image img) {
         var db = new DialogBox(text, img);
         db.flip();

@@ -30,6 +30,10 @@ public class Locky {
         this.scanner = new Scanner(System.in);
     }
 
+    /**
+     * Returns greeting onboarding message.
+     * @return greeting String
+     */
     public String getGreeting() {
         String intro = "Hello! I'm Locky\n"
                 + "Reminding you to Lock In!\n"
@@ -37,6 +41,12 @@ public class Locky {
         return intro;
     }
 
+    /**
+     * Handles user input as a String by returning
+     * a String response by Locky.
+     * @param input String
+     * @return String response retrieved from handleLineToString
+     */
     public String getResponse(String input) {
         if (Objects.equals(input, "bye")) {
             return "You better Lock In!\n";
@@ -95,6 +105,12 @@ public class Locky {
         scanner.close();
     }
 
+    /**
+     * Parses and executes a single line of user input as a Locky command.
+     * @param taskString raw user input
+     * @return formatted string containing Locky's response to the command
+     * @throws LockyException if arguments are empty or invalid
+     */
     private String handleLineToString(String taskString) throws LockyException {
         Parser.ParsedCommand pc = Parser.parseCommandLine(taskString);
         String cmd = pc.command();
