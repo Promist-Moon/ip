@@ -1,13 +1,11 @@
 package locky.tasks;
 
-import locky.utils.Storage;
-import locky.error.LockyException;
-
 import java.io.IOException;
-
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
+
+import locky.error.LockyException;
+import locky.utils.Storage;
 
 /**
  * Represents an in-memory list of tasks that can be modified and persisted.
@@ -150,15 +148,14 @@ public class TaskList {
      * matching the given keyword.
      *
      * @param keyword String matcher
-     * @return ArrayList of tasks containing keyword
-     * in description
+     * @return ArrayList of tasks containing keyword in description
      */
     public ArrayList<Task> find(String keyword) {
         ArrayList<Task> results = new ArrayList<>();
         String key = keyword.trim().toLowerCase();
         for (Task t : tasks) {
-            if (t.getDescription() != null &&
-                    t.getDescription().toLowerCase().contains(key)) {
+            if (t.getDescription() != null
+                    && t.getDescription().toLowerCase().contains(key)) {
                 results.add(t);
             }
         }
