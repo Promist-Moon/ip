@@ -1,13 +1,11 @@
 package locky.tasks;
 
-import locky.utils.Storage;
-import locky.error.LockyException;
-
 import java.io.IOException;
-
 import java.time.LocalDateTime;
-
 import java.util.ArrayList;
+
+import locky.error.LockyException;
+import locky.utils.Storage;
 
 /**
  * Represents an in-memory list of tasks that can be modified and persisted.
@@ -43,9 +41,11 @@ public class TaskList {
         return tasks.size();
     }
 
-    public Task getTask(int index1Based) throws LockyException {
-        int idx = index1Based - 1;
-        if (idx < 0 || idx >= tasks.size()) throw new LockyException("No such task: " + index1Based);
+    public Task getTask(int indexOneBased) throws LockyException {
+        int idx = indexOneBased - 1;
+        if (idx < 0 || idx >= tasks.size()) {
+            throw new LockyException("No such task: " + indexOneBased);
+        }
         return tasks.get(idx);
     }
 
@@ -150,15 +150,16 @@ public class TaskList {
      * matching the given keyword.
      *
      * @param keyword String matcher
-     * @return ArrayList of tasks containing keyword
-     * in description
+     * @return ArrayList of tasks containing keyword in description
      */
     public ArrayList<Task> find(String keyword) {
         ArrayList<Task> results = new ArrayList<>();
         String key = keyword.trim().toLowerCase();
         for (Task t : tasks) {
-            if (t.getDescription() != null &&
-                    t.getDescription().toLowerCase().contains(key)) {
+            assert t != null : "Task must not be null";
+            assert t.getDescription() != null : "Task description must not be null";
+            if (t.getDescription() != null
+                    && t.getDescription().toLowerCase().contains(key)) {
                 results.add(t);
             }
         }

@@ -27,7 +27,7 @@ public class Event extends Task {
     public Event(String description, boolean isDone, LocalDateTime start, LocalDateTime end) {
         super(description, isDone);
         this.start = Objects.requireNonNull(start, "start");
-        this.end   = Objects.requireNonNull(end, "end");
+        this.end = Objects.requireNonNull(end, "end");
         if (!end.isAfter(start)) {
             throw new IllegalArgumentException("Locky.tasks.Event end must be after start.");
         }
@@ -60,7 +60,7 @@ public class Event extends Task {
      *
      * @return the formatted end date/time of the event.
      */
-    public String getEndFormatted()   {
+    public String getEndFormatted() {
         return DateTimeFormat.DISPLAY.format(end);
     }
 }
