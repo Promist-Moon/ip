@@ -144,7 +144,6 @@ public final class Parser {
         }
     }
 
-
     /**
      * Parses a raw line into a specific Command.
      *

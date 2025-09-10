@@ -27,14 +27,14 @@ public class TaskList {
      */
     public TaskList(Storage storage) {
         this.storage = storage;
-        ArrayList<Task> loaded;
+        ArrayList<Task> loadedTasks;
         try {
-            loaded = storage.load();
+            loadedTasks = storage.load();
         } catch (IOException e) {
             System.out.println("(Could not load previous tasks: " + e.getMessage() + ")");
-            loaded = new ArrayList<>();
+            loadedTasks = new ArrayList<>();
         }
-        this.tasks = loaded;
+        this.tasks = loadedTasks;
     }
 
     private TaskList(ArrayList<Task> tasks) {
@@ -68,7 +68,7 @@ public class TaskList {
      *
      * @return the formatted string representation of the task list.
      */
-    public String printList() {
+    public String getListString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
@@ -168,8 +168,10 @@ public class TaskList {
         ArrayList<Task> resultsArray = new ArrayList<>();
         String key = keyword.trim().toLowerCase();
         for (Task t : tasks) {
-            if (t.getDescription() != null
-                    && t.getDescription().toLowerCase().contains(key)) {
+            boolean hasDescription = t.getDescription() != null;
+            boolean hasKeyword = t.getDescription().toLowerCase().contains(key);
+            boolean isFindResult = hasDescription && hasKeyword;
+            if (isFindResult) {
                 resultsArray.add(t);
             }
         }
@@ -188,7 +190,7 @@ public class TaskList {
         if (matches.isEmpty()) {
             return "No matching tasks found.\n";
         } else {
-            return matches.printList();
+            return matches.getListString();
         }
     }
 

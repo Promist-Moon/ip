@@ -10,6 +10,6 @@ import locky.tasks.TaskList;
 public class ListCommand implements Command {
     @Override
     public String execute(TaskList list) {
-        return list.printList();
+        return list.getListString();
     }
 }

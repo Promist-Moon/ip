@@ -35,7 +35,7 @@ public class Event extends Task {
 
     @Override
     public String toString() {
-        return "[E]" + super.toString() + " from: " + getStartFormatted() + " to: " + getEndFormatted();
+        return "[E]" + super.toString() + " from: " + getFormattedStart() + " to: " + getFormattedEnd();
     }
 
     public LocalDateTime getStart() {
@@ -51,7 +51,7 @@ public class Event extends Task {
      *
      * @return the formatted start date/time of the event.
      */
-    public String getStartFormatted() {
+    public String getFormattedStart() {
         return DateTimeFormat.DISPLAY.format(start);
     }
 
@@ -60,7 +60,7 @@ public class Event extends Task {
      *
      * @return the formatted end date/time of the event.
      */
-    public String getEndFormatted() {
+    public String getFormattedEnd() {
         return DateTimeFormat.DISPLAY.format(end);
     }
 }
