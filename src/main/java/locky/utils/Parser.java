@@ -66,11 +66,16 @@ public final class Parser {
                     "Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2019-12-02 1800\"");
         }
         Matcher m = DEADLINE_RE.matcher(args);
-        if (!m.matches()) {
-            if (!args.contains("/by")) {
-                throw new LockyException(
-                        "Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
-            }
+
+        boolean isMatch = m.matches();
+        boolean hasByMarker = args.contains("/by");
+        boolean hasWrongFormat = !isMatch && hasByMarker;
+        boolean hasNoBy = !isMatch && !hasByMarker;
+
+        if (hasNoBy) {
+            throw new LockyException(
+                    "Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
+        } else if (hasWrongFormat) {
             throw new LockyException(
                     "Bad deadline format. Use: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
         }
