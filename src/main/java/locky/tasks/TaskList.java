@@ -43,7 +43,9 @@ public class TaskList {
 
     public Task getTask(int index1Based) throws LockyException {
         int idx = index1Based - 1;
-        if (idx < 0 || idx >= tasks.size()) throw new LockyException("No such task: " + index1Based);
+        if (idx < 0 || idx >= tasks.size()) {
+            throw new LockyException("No such task: " + index1Based);
+        }
         return tasks.get(idx);
     }
 
