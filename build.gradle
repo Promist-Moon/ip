@@ -45,6 +45,8 @@ test {
 
 application {
     mainClass.set("locky.app.Launcher")
+
+    applicationDefaultJvmArgs = ['-ea']
 }
 
 shadowJar {

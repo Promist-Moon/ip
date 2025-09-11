@@ -25,6 +25,7 @@ public class Locky {
      * @param filePath the file path where tasks are stored and loaded.
      */
     public Locky(String filePath) {
+        assert filePath != null && !filePath.isBlank() : "filePath must be non-empty";
         Storage storage = new Storage(filePath);
         this.list = new TaskList(storage);
         this.scanner = new Scanner(System.in);
@@ -48,6 +49,8 @@ public class Locky {
      * @return String response retrieved from handleLineToString
      */
     public String getResponse(String input) {
+        assert input != null : "input must not be null";
+
         if (Objects.equals(input, "bye")) {
             return "You better Lock In!\n";
         }
@@ -146,6 +149,7 @@ public class Locky {
                     prefix = (!wasDone ? "Oh.... it's still not done."
                             : "Ok, undone. Back to work!");
                 } else {
+                    assert "delete".equals(cmd) : "Unreachable: expected delete here";
                     t = list.delete(taskNumber);
                     prefix = "Ok, so let's just forget that task existed...";
                 }
@@ -204,6 +208,7 @@ public class Locky {
                     return sb.toString();
                 }
             } catch (Exception e) {
+                assert false : "Unreachable: unexpected exception in find: " + e;
                 return "Error while finding tasks: " + e.getMessage() + "\n";
             }
         }
