@@ -13,7 +13,9 @@ import locky.tasks.TaskList;
  */
 public class MarkCommand implements Command {
     private final String indexArg;
-    public MarkCommand(String indexArg) { this.indexArg = indexArg; }
+    public MarkCommand(String indexArg) {
+        this.indexArg = indexArg;
+    }
 
     @Override public String execute(TaskList list) throws LockyException, IOException {
         if (indexArg == null || indexArg.isBlank()) {

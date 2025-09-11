@@ -12,7 +12,9 @@ import locky.tasks.TaskList;
  */
 public class DeleteCommand implements Command {
     private final String indexArg;
-    public DeleteCommand(String indexArg) { this.indexArg = indexArg; }
+    public DeleteCommand(String indexArg) {
+        this.indexArg = indexArg;
+    }
 
     @Override public String execute(TaskList list) throws LockyException, IOException {
         if (indexArg == null || indexArg.isBlank()) {
