@@ -20,6 +20,7 @@ public class Locky {
      * @param filePath the file path where tasks are stored and loaded.
      */
     public Locky(String filePath) {
+        assert filePath != null && !filePath.isBlank() : "filePath must be non-empty";
         Storage storage = new Storage(filePath);
         this.list = new TaskList(storage);
     }
@@ -41,6 +42,8 @@ public class Locky {
      * @return String response retrieved from handleLineToString
      */
     public String getResponse(String input) {
+        assert input != null : "input must not be null";
+
         if (Objects.equals(input, "bye")) {
             return "You better Lock In!\n";
         }

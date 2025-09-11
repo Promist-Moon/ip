@@ -13,12 +13,9 @@ public class Main extends Application {
     private Locky locky = new Locky("./data/locky.txt");
 
     /**
-     *
-     * @param stage the primary stage for this application, onto which
-     * the application scene can be set.
-     * Applications may create other stages, if needed, but they will not be
-     * primary stages.
-     * @throws Exception
+     * Starts the stage
+     * @param stage the primary stage for this application
+     * @throws Exception when controller fails to load
      */
     @Override
     public void start(Stage stage) throws Exception {

@@ -46,10 +46,10 @@ public class TaskList {
         return tasks.size();
     }
 
-    public Task getTask(int index1Based) throws LockyException {
-        int idx = index1Based - 1;
+    public Task getTask(int indexOneBased) throws LockyException {
+        int idx = indexOneBased - 1;
         if (idx < 0 || idx >= tasks.size()) {
-            throw new LockyException("No such task: " + index1Based);
+            throw new LockyException("No such task: " + indexOneBased);
         }
         return tasks.get(idx);
     }
@@ -168,6 +168,9 @@ public class TaskList {
         ArrayList<Task> resultsArray = new ArrayList<>();
         String key = keyword.trim().toLowerCase();
         for (Task t : tasks) {
+            assert t != null : "Task must not be null";
+            assert t.getDescription() != null : "Task description must not be null";
+          
             boolean hasDescription = t.getDescription() != null;
             boolean hasKeyword = t.getDescription().toLowerCase().contains(key);
             boolean isFindResult = hasDescription && hasKeyword;
