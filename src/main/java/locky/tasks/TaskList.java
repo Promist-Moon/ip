@@ -170,7 +170,6 @@ public class TaskList {
         for (Task t : tasks) {
             assert t != null : "Task must not be null";
             assert t.getDescription() != null : "Task description must not be null";
-          
             boolean hasDescription = t.getDescription() != null;
             boolean hasKeyword = t.getDescription().toLowerCase().contains(key);
             boolean isFindResult = hasDescription && hasKeyword;
