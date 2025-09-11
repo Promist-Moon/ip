@@ -93,7 +93,9 @@ public class Storage {
      */
     private void ensureParentDir() throws IOException {
         File parent = file.getParentFile();
-        if (parent != null && !parent.exists()) {
+        boolean hasParent = parent != null;
+        boolean hasMissingParent = hasParent && !parent.exists();
+        if (hasMissingParent) {
             Files.createDirectories(Path.of(parent.toURI()));
         }
     }
@@ -116,14 +118,14 @@ public class Storage {
                     "D",
                     d.getDone() ? "1" : "0",
                     d.getDescription(),
-                    d.getDeadlineFormatted());
+                    d.getFormattedDeadline());
         } else if (t instanceof Event e) {
             return String.join("|",
                     "E",
                     e.getDone() ? "1" : "0",
                     e.getDescription(),
-                    e.getStartFormatted(),
-                    e.getEndFormatted());
+                    e.getFormattedStart(),
+                    e.getFormattedEnd());
         }
         return "";
     }
@@ -143,19 +145,19 @@ public class Storage {
         }
 
         String type = p[0];
-        boolean done = "1".equals(p[1]);
+        boolean isDone = "1".equals(p[1]);
         String desc = p[2];
 
         switch (type) {
         case "T":
-            return new Todo(desc, done);
+            return new Todo(desc, isDone);
 
         case "D": {
             if (p.length < 4) {
                 return null;
             }
             LocalDateTime by = parseDateFlexible(p[3]);
-            return new Deadline(desc, done, by);
+            return new Deadline(desc, isDone, by);
         }
 
         case "E": {
@@ -164,7 +166,7 @@ public class Storage {
             }
             LocalDateTime start = parseDateFlexible(p[3]);
             LocalDateTime end = parseDateFlexible(p[4]);
-            return new Event(desc, done, start, end);
+            return new Event(desc, isDone, start, end);
         }
 
         default:
@@ -193,6 +195,6 @@ public class Storage {
             }
         }
         throw new IllegalArgumentException("Unrecognized datetime: \"" + raw
-                + "\". Expected formats like \"" + DateTimeFormat.INPUT.toString() + "\" or ISO-8601.");
+                + "\". Expected formats like \"" + DateTimeFormat.INPUT + "\" or ISO-8601.");
     }
 }

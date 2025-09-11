@@ -27,14 +27,19 @@ public class TaskList {
      */
     public TaskList(Storage storage) {
         this.storage = storage;
-        ArrayList<Task> loaded;
+        ArrayList<Task> loadedTasks;
         try {
-            loaded = storage.load();
+            loadedTasks = storage.load();
         } catch (IOException e) {
             System.out.println("(Could not load previous tasks: " + e.getMessage() + ")");
-            loaded = new ArrayList<>();
+            loadedTasks = new ArrayList<>();
         }
-        this.tasks = loaded;
+        this.tasks = loadedTasks;
+    }
+
+    private TaskList(ArrayList<Task> tasks) {
+        this.tasks = tasks;
+        this.storage = null;
     }
 
     public int getSize() {
@@ -49,6 +54,13 @@ public class TaskList {
         return tasks.get(idx);
     }
 
+    public boolean isTaskDone(int indexOneBased) throws LockyException {
+        return this.getTask(indexOneBased).getDone();
+    }
+
+    public boolean isEmpty() {
+        return this.getSize() == 0;
+    }
 
     /**
      * Returns a string representation of the task list, with
@@ -56,7 +68,7 @@ public class TaskList {
      *
      * @return the formatted string representation of the task list.
      */
-    public String printList() {
+    public String getListString() {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < tasks.size(); i++) {
             sb.append(i + 1).append(". ").append(tasks.get(i)).append("\n");
@@ -103,13 +115,13 @@ public class TaskList {
     /**
      * Marks the task at the given index as completed and saves the updated list.
      *
-     * @param index1Based the 1-based index of the task to mark.
+     * @param indexOneBased the 1-based index of the task to mark.
      * @return the updated task that was marked as completed.
      * @throws IOException if saving the updated list fails.
      * @throws LockyException if the index is invalid.
      */
-    public Task mark(int index1Based) throws IOException, LockyException {
-        Task t = getTask(index1Based);
+    public Task mark(int indexOneBased) throws IOException, LockyException {
+        Task t = getTask(indexOneBased);
         t.setDone();
         save();
         return t;
@@ -118,13 +130,13 @@ public class TaskList {
     /**
      * Marks the task at the given index as not completed and saves the updated list.
      *
-     * @param index1Based the 1-based index of the task to unmark.
+     * @param indexOneBased the 1-based index of the task to unmark.
      * @return the updated task that was unmarked.
      * @throws IOException if saving the updated list fails.
      * @throws LockyException if the index is invalid.
      */
-    public Task unmark(int index1Based) throws IOException, LockyException {
-        Task t = getTask(index1Based);
+    public Task unmark(int indexOneBased) throws IOException, LockyException {
+        Task t = getTask(indexOneBased);
         t.setUndone();
         save();
         return t;
@@ -133,14 +145,14 @@ public class TaskList {
     /**
      * Deletes the task at the given index and saves the updated list.
      *
-     * @param index1Based the 1-based index of the task to delete.
+     * @param indexOneBased the 1-based index of the task to delete.
      * @return the task that was removed from the list.
      * @throws IOException if saving the updated list fails.
      * @throws LockyException if the index is invalid.
      */
-    public Task delete(int index1Based) throws IOException, LockyException {
-        Task t = getTask(index1Based);
-        tasks.remove(index1Based - 1);
+    public Task delete(int indexOneBased) throws IOException, LockyException {
+        Task t = getTask(indexOneBased);
+        tasks.remove(indexOneBased - 1);
         save();
         return t;
     }
@@ -152,18 +164,36 @@ public class TaskList {
      * @param keyword String matcher
      * @return ArrayList of tasks containing keyword in description
      */
-    public ArrayList<Task> find(String keyword) {
-        ArrayList<Task> results = new ArrayList<>();
+    private TaskList find(String keyword) {
+        ArrayList<Task> resultsArray = new ArrayList<>();
         String key = keyword.trim().toLowerCase();
         for (Task t : tasks) {
             assert t != null : "Task must not be null";
             assert t.getDescription() != null : "Task description must not be null";
-            if (t.getDescription() != null
-                    && t.getDescription().toLowerCase().contains(key)) {
-                results.add(t);
+            boolean hasDescription = t.getDescription() != null;
+            boolean hasKeyword = t.getDescription().toLowerCase().contains(key);
+            boolean isFindResult = hasDescription && hasKeyword;
+            if (isFindResult) {
+                resultsArray.add(t);
             }
         }
-        return results;
+        return new TaskList(resultsArray);
+    }
+
+    /**
+     * Formats a list of tasks into a string
+     * of search results
+     *
+     * @param keyword String matcher
+     * @return String of tasks containing keyword in description
+     */
+    public String formatFindResults(String keyword) {
+        TaskList matches = find(keyword);
+        if (matches.isEmpty()) {
+            return "No matching tasks found.\n";
+        } else {
+            return matches.getListString();
+        }
     }
 
     /**

@@ -26,7 +26,7 @@ public class Deadline extends Task {
 
     @Override
     public String toString() {
-        return "[D]" + super.toString() + " by: " + getDeadlineFormatted();
+        return "[D]" + super.toString() + " by: " + getFormattedDeadline();
     }
 
     public LocalDateTime getDeadline() {
@@ -39,7 +39,7 @@ public class Deadline extends Task {
      *
      * @return formatted deadline
      */
-    public String getDeadlineFormatted() {
+    public String getFormattedDeadline() {
         return DateTimeFormat.DISPLAY.format(deadline);
     }
 }

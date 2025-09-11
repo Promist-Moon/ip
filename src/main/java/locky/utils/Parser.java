@@ -6,6 +6,15 @@ import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import locky.commands.Command;
+import locky.commands.DeadlineCommand;
+import locky.commands.DeleteCommand;
+import locky.commands.EventCommand;
+import locky.commands.FindCommand;
+import locky.commands.ListCommand;
+import locky.commands.MarkCommand;
+import locky.commands.TodoCommand;
+import locky.commands.UnmarkCommand;
 import locky.error.LockyException;
 
 /**
@@ -57,11 +66,16 @@ public final class Parser {
                     "Deadline needs \"description /by when\". Try: \"deadline CS2100 lab /by 2019-12-02 1800\"");
         }
         Matcher m = DEADLINE_RE.matcher(args);
-        if (!m.matches()) {
-            if (!args.contains("/by")) {
-                throw new LockyException(
-                        "Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
-            }
+
+        boolean isMatch = m.matches();
+        boolean hasByMarker = args.contains("/by");
+        boolean hasWrongFormat = !isMatch && hasByMarker;
+        boolean hasNoBy = !isMatch && !hasByMarker;
+
+        if (hasNoBy) {
+            throw new LockyException(
+                    "Missing \"/by\". Format: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
+        } else if (hasWrongFormat) {
             throw new LockyException(
                     "Bad deadline format. Use: \"deadline <desc> /by yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)\"");
         }
@@ -132,6 +146,40 @@ public final class Parser {
             return new ParsedEvent(desc, startDt, endDt);
         } catch (DateTimeParseException dpe) {
             throw new LockyException("Invalid date format. Use yyyy-MM-dd HHmm (e.g. 2019-12-02 1800)");
+        }
+    }
+
+    /**
+     * Parses a raw line into a specific Command.
+     *
+     * @param raw the raw user input line
+     * @return a Command ready to be executed
+     * @throws LockyException if the input is invalid or unknown
+     */
+    public static Command parse(String raw) throws LockyException {
+        ParsedCommand pc = parseCommandLine(raw);
+        String cmd = pc.command();
+        String args = pc.args();
+
+        switch (cmd) {
+        case "list":
+            return new ListCommand();
+        case "todo":
+            return new TodoCommand(args);
+        case "deadline":
+            return new DeadlineCommand(args);
+        case "event":
+            return new EventCommand(args);
+        case "mark":
+            return new MarkCommand(args);
+        case "unmark":
+            return new UnmarkCommand(args);
+        case "delete":
+            return new DeleteCommand(args);
+        case "find":
+            return new FindCommand(args);
+        default:
+            throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark | find");
         }
     }
 
