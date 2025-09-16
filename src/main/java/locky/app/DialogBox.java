@@ -60,7 +60,11 @@ public class DialogBox extends HBox {
      * @return DialogBox styled for Locky's responses
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        HBox.setHgrow(db, javafx.scene.layout.Priority.ALWAYS);
+        db.dialog.maxWidthProperty().bind(db.widthProperty().multiply(0.7));
+        db.setAlignment(Pos.TOP_RIGHT);
+        return db;
     }
 
     /**
