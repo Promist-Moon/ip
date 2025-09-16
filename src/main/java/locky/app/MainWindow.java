@@ -1,5 +1,8 @@
 package locky.app;
 
+import java.util.Objects;
+
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
@@ -58,6 +61,10 @@ public class MainWindow extends AnchorPane {
                 DialogBox.getLockyDialog(response, lockyImage)
         );
         userInput.clear();
+
+        if (Objects.equals(input, "bye")) {
+            Platform.runLater(() -> Platform.exit());
+        }
     }
 }
 

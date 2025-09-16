@@ -7,8 +7,8 @@ import javafx.application.Application;
  */
 public class Launcher {
     public static void main(String[] args) {
-        boolean enabled = false;
-        assert enabled = true;
+        boolean isEnabled = false;
+        assert isEnabled = true;
         Application.launch(Main.class, args);
     }
 }
