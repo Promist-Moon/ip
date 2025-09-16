@@ -32,7 +32,6 @@
             <Label fx:id="dialog"
                    text="Label"
                    wrapText="true"
-                   maxWidth="280"
                    minHeight="-Infinity"
                    style="-fx-background-color: #e9eef5; -fx-background-radius: 14; -fx-padding: 10 12 10 12; -fx-text-fill: #1f2937; -fx-font-size: 13px;">
                 <!-- subtle shadow on the bubble -->

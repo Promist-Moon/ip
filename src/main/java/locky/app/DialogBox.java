@@ -35,6 +35,13 @@ public class DialogBox extends HBox {
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
+            // allow bubble to grow in width
+            dialog.maxWidthProperty().bind(
+                    javafx.beans.binding.Bindings.min(
+                            this.widthProperty().multiply(0.7), // use 70% of available row width
+                            600
+                    )
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
