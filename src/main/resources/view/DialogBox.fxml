@@ -21,7 +21,10 @@
     <children>
 
         <!-- Message bubble (with text and timestamp) -->
-        <VBox spacing="6" alignment="TOP_RIGHT" fillWidth="false">
+        <VBox spacing="6"
+              alignment="TOP_RIGHT"
+              fillWidth="false"
+              style="-fx-background-color: transparent;">
             <padding>
                 <Insets left="6"/>
             </padding>
@@ -46,7 +49,7 @@
         </VBox>
 
         <!-- Avatar (circular) -->
-        <StackPane alignment="TOP_RIGHT">
+        <StackPane alignment="TOP_RIGHT" style="-fx-background-color: transparent;">
             <children>
                 <ImageView fx:id="displayPicture"
                            fitHeight="100.0" fitWidth="100.0"

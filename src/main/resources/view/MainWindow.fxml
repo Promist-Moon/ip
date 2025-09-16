@@ -11,7 +11,10 @@
             prefHeight="600.0" prefWidth="400.0"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="locky.app.MainWindow">
+            fx:controller="locky.app.MainWindow"
+            style="-fx-background-image: url('/images/Background.png');
+           -fx-background-size: cover;
+           -fx-background-position: center;">
     <children>
         <!-- ScrollPane fills all space above input bar -->
         <ScrollPane fx:id="scrollPane"
@@ -20,10 +23,13 @@
                     AnchorPane.leftAnchor="0.0"
                     AnchorPane.rightAnchor="0.0"
                     AnchorPane.bottomAnchor="41.0"
-                    fitToWidth="true">
+                    fitToWidth="true"
+                    style="-fx-background-color: transparent;
+                   -fx-background: transparent;
+                   -fx-control-inner-background: transparent;">
             <content>
                 <VBox fx:id="dialogContainer"
-                      fillWidth="true" />
+                      style="-fx-background-color: transparent;" />
             </content>
         </ScrollPane>
 
