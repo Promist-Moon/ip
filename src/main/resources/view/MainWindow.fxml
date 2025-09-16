@@ -11,34 +11,43 @@
             prefHeight="600.0" prefWidth="400.0"
             xmlns="http://javafx.com/javafx/17"
             xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="locky.app.MainWindow">
+            fx:controller="locky.app.MainWindow"
+            style="-fx-background-image: url('/images/Background.png');
+           -fx-background-size: cover;
+           -fx-background-position: center;">
     <children>
+        <!-- ScrollPane fills all space above input bar -->
+        <ScrollPane fx:id="scrollPane"
+                    hbarPolicy="NEVER"
+                    AnchorPane.topAnchor="0.0"
+                    AnchorPane.leftAnchor="0.0"
+                    AnchorPane.rightAnchor="0.0"
+                    AnchorPane.bottomAnchor="41.0"
+                    fitToWidth="true"
+                    style="-fx-background-color: transparent;
+                   -fx-background: transparent;
+                   -fx-control-inner-background: transparent;">
+            <content>
+                <VBox fx:id="dialogContainer"
+                      style="-fx-background-color: transparent;" />
+            </content>
+        </ScrollPane>
+
         <TextField fx:id="userInput"
-                   layoutY="558.0"
+                   AnchorPane.rightAnchor="76.0"
                    onAction="#handleUserInput"
                    prefHeight="41.0"
                    prefWidth="324.0"
-                   AnchorPane.bottomAnchor="1.0" />
+                   AnchorPane.leftAnchor="0.0"
+                   AnchorPane.bottomAnchor="0.0"/>
         <Button fx:id="sendButton"
-                layoutX="324.0"
-                layoutY="558.0"
+                AnchorPane.bottomAnchor="0.0"
+                AnchorPane.rightAnchor="0.0"
                 mnemonicParsing="false"
                 onAction="#handleUserInput"
                 prefHeight="41.0"
                 prefWidth="76.0"
                 text="Send" />
-        <ScrollPane fx:id="scrollPane"
-                    hbarPolicy="NEVER"
-                    hvalue="1.0"
-                    prefHeight="557.0"
-                    prefWidth="400.0"
-                    vvalue="1.0">
-            <content>
-                <VBox fx:id="dialogContainer"
-                      prefHeight="552.0"
-                      prefWidth="388.0" />
-            </content>
-        </ScrollPane>
     </children>
 </AnchorPane>
 

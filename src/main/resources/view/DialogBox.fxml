@@ -4,19 +4,65 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.effect.DropShadow?>
 
-<fx:root alignment="TOP_RIGHT"
-         maxHeight="1.7976931348623157E308"
-         maxWidth="1.7976931348623157E308"
-         prefWidth="400.0"
-         type="javafx.scene.layout.HBox"
+<fx:root type="javafx.scene.layout.HBox"
          xmlns="http://javafx.com/javafx/17"
-         xmlns:fx="http://javafx.com/fxml/1">
+         xmlns:fx="http://javafx.com/fxml/1"
+         alignment="TOP_RIGHT"
+         spacing="10"
+         prefWidth="400.0"
+         maxWidth="1.7976931348623157E308"
+         maxHeight="1.7976931348623157E308">
+
     <children>
-        <Label fx:id="dialog" text="Label" wrapText="true" minHeight="-Infinity"/>
-        <ImageView fx:id="displayPicture" fitHeight="99.0" fitWidth="99.0" pickOnBounds="true" preserveRatio="true" />
+
+        <!-- Message bubble (with text and timestamp) -->
+        <VBox spacing="6"
+              alignment="TOP_RIGHT"
+              fillWidth="false"
+              style="-fx-background-color: transparent;">
+            <padding>
+                <Insets left="6"/>
+            </padding>
+            <!-- Message bubble -->
+            <Label fx:id="dialog"
+                   text="Label"
+                   wrapText="true"
+                   minHeight="-Infinity"
+                   style="-fx-background-color: #e9eef5; -fx-background-radius: 14; -fx-padding: 10 12 10 12; -fx-text-fill: #1f2937; -fx-font-size: 13px;">
+                <!-- subtle shadow on the bubble -->
+                <effect>
+                    <DropShadow radius="3" offsetY="1" color="#00000022"/>
+                </effect>
+            </Label>
+
+            <!-- Timestamp (right-aligned, lighter) -->
+            <Label fx:id="timestamp"
+                   text="21:12"
+                   style="-fx-text-fill: #5b6777; -fx-font-size: 11px;"
+                   opacity="0.8"/>
+        </VBox>
+
+        <!-- Avatar (circular) -->
+        <StackPane alignment="TOP_RIGHT" style="-fx-background-color: transparent;">
+            <children>
+                <ImageView fx:id="displayPicture"
+                           fitHeight="100.0" fitWidth="100.0"
+                           pickOnBounds="true" preserveRatio="true"
+                           StackPane.alignment="TOP_RIGHT"/>
+            </children>
+            <clip>
+                <Circle radius="50" centerX="50" centerY="50"/>
+            </clip>
+        </StackPane>
+
     </children>
+
     <padding>
-        <Insets bottom="15.0" left="5.0" right="5.0" top="15.0" />
+        <Insets top="12.0" right="10.0" bottom="12.0" left="10.0" />
     </padding>
 </fx:root>

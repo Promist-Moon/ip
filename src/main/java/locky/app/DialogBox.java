@@ -35,6 +35,13 @@ public class DialogBox extends HBox {
             fxmlLoader.setController(this);
             fxmlLoader.setRoot(this);
             fxmlLoader.load();
+            // allow bubble to grow in width
+            dialog.maxWidthProperty().bind(
+                    javafx.beans.binding.Bindings.min(
+                            this.widthProperty().multiply(0.7), // use 70% of available row width
+                            600
+                    )
+            );
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -60,7 +67,11 @@ public class DialogBox extends HBox {
      * @return DialogBox styled for Locky's responses
      */
     public static DialogBox getUserDialog(String text, Image img) {
-        return new DialogBox(text, img);
+        var db = new DialogBox(text, img);
+        HBox.setHgrow(db, javafx.scene.layout.Priority.ALWAYS);
+        db.dialog.maxWidthProperty().bind(db.widthProperty().multiply(0.7));
+        db.setAlignment(Pos.TOP_RIGHT);
+        return db;
     }
 
     /**
