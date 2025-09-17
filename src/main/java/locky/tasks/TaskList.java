@@ -107,9 +107,36 @@ public class TaskList {
      * @param to the end date and time of the event.
      * @throws IOException if saving the updated list fails.
      */
-    public void addEvent(String desc, LocalDateTime from, LocalDateTime to) throws IOException {
+    public void addEvent(String desc, LocalDateTime from, LocalDateTime to) throws IOException, LockyException {
+        Event clashing = findClash(from, to);
+        if (clashing != null) {
+            throw new LockyException("Clash with existing event: "
+                    + clashing.getDescription() + " ("
+                    + clashing.getFormattedStart() + "–" + clashing.getFormattedEnd() + ")");
+        }
         tasks.add(new Event(desc, false, from, to));
         save();
+    }
+
+    /**
+     * Finds clash in timings for existing events when a new Event
+     * is added into tasks.
+     *
+     * @param from the LocalDateTime of the proposed start of Event
+     * @param to the LocalDateTime of the proposed end of Event
+     * @return null if no clashes; Event it clashes with
+     */
+    private Event findClash(LocalDateTime from, LocalDateTime to) {
+        for (Task t : this.tasks) {
+            if (!(t instanceof Event)) {
+                continue;
+            }
+            Event e = (Event) t;
+            if (e.getStart().isBefore(to) && e.getEnd().isAfter(from)) {
+                return e;
+            }
+        }
+        return null;
     }
 
     /**

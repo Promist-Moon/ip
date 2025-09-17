@@ -179,7 +179,9 @@ public final class Parser {
         case "find":
             return new FindCommand(args);
         default:
-            throw new LockyException("Unknown command. Try: list | todo | deadline | event | mark | unmark | find");
+            throw new LockyException(
+                    "Unknown command. Try: list | todo | deadline | event | mark | unmark | delete | find"
+            );
         }
     }
 
