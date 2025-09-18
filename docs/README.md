@@ -88,6 +88,3 @@ Expected output:
 Ok, so let's just forget that task existed...
 [D][X] send in 2103T by: Aug 29 2025, 4:30pm
 ```
-
-
-// Feature details
