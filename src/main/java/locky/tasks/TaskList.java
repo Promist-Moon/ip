@@ -132,7 +132,7 @@ public class TaskList {
                 continue;
             }
             Event e = (Event) t;
-            if (e.getStart().isBefore(to) && e.getEnd().isAfter(from)) {
+            if (e.isClashing(from, to)) {
                 return e;
             }
         }
@@ -194,13 +194,12 @@ public class TaskList {
     private TaskList find(String keyword) {
         ArrayList<Task> resultsArray = new ArrayList<>();
         String key = keyword.trim().toLowerCase();
+
+        // iterate through each task to find matching descriptions
         for (Task t : tasks) {
             assert t != null : "Task must not be null";
             assert t.getDescription() != null : "Task description must not be null";
-            boolean hasDescription = t.getDescription() != null;
-            boolean hasKeyword = t.getDescription().toLowerCase().contains(key);
-            boolean isFindResult = hasDescription && hasKeyword;
-            if (isFindResult) {
+            if (t != null && t.isMatching(key)) {
                 resultsArray.add(t);
             }
         }

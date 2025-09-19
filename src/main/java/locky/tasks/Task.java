@@ -41,4 +41,22 @@ public class Task {
     public String getDescription() {
         return this.description;
     }
+
+    /**
+     * Checks whether description of a task matches a certain
+     * case-insensitive query.
+     *
+     * @param query the keyword to search.
+     * @return true if description contains query; false otherwise.
+     */
+    public boolean isMatching(String query) {
+        if (query == null) {
+            return false;
+        }
+        String key = query.trim().toLowerCase();
+        if (key.isEmpty()) {
+            return false;
+        }
+        return description.toLowerCase().contains(key);
+    }
 }

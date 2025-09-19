@@ -63,4 +63,15 @@ public class Event extends Task {
     public String getFormattedEnd() {
         return DateTimeFormat.DISPLAY.format(end);
     }
+
+    /**
+     * Checks if the Event is clashing with a stipulated Event period.
+     *
+     * @param start the LocalDateTime start of the Event.
+     * @param end the LocalDateTime end of the Event.
+     * @return
+     */
+    public boolean isClashing(LocalDateTime start, LocalDateTime end) {
+        return this.start.isBefore(end) && this.end.isAfter(start);
+    }
 }
