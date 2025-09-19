@@ -31,6 +31,42 @@ public final class Parser {
     private static final Pattern EVENT_RE = Pattern.compile("^(.+?)\\s*/from\\s+(.+?)\\s*/to\\s+(.+)$");
 
     /**
+     * Parses a raw line into a specific Command.
+     *
+     * @param raw the raw user input line.
+     * @return a Command ready to be executed.
+     * @throws LockyException if the input is invalid or unknown.
+     */
+    public static Command parse(String raw) throws LockyException {
+        ParsedCommand pc = parseCommandLine(raw);
+        String cmd = pc.command();
+        String args = pc.args();
+
+        switch (cmd) {
+        case "list":
+            return new ListCommand();
+        case "todo":
+            return new TodoCommand(args);
+        case "deadline":
+            return new DeadlineCommand(args);
+        case "event":
+            return new EventCommand(args);
+        case "mark":
+            return new MarkCommand(args);
+        case "unmark":
+            return new UnmarkCommand(args);
+        case "delete":
+            return new DeleteCommand(args);
+        case "find":
+            return new FindCommand(args);
+        default:
+            throw new LockyException(
+                    "Unknown command. Try: list | todo | deadline | event | mark | unmark | delete | find"
+            );
+        }
+    }
+
+    /**
      * Parses a raw input line into a command and its argument string.
      * The command is lower-cased; the remainder (if any) is returned as {@code args}.
      *
@@ -113,6 +149,7 @@ public final class Parser {
         if (args.isEmpty()) {
             throw new LockyException("Locky.tasks.Event needs \"description /from start /to end\".");
         }
+
         Matcher m = EVENT_RE.matcher(args);
         if (!m.matches()) {
             if (!args.contains("/from")) {
@@ -150,63 +187,27 @@ public final class Parser {
     }
 
     /**
-     * Parses a raw line into a specific Command.
-     *
-     * @param raw the raw user input line.
-     * @return a Command ready to be executed.
-     * @throws LockyException if the input is invalid or unknown.
-     */
-    public static Command parse(String raw) throws LockyException {
-        ParsedCommand pc = parseCommandLine(raw);
-        String cmd = pc.command();
-        String args = pc.args();
-
-        switch (cmd) {
-        case "list":
-            return new ListCommand();
-        case "todo":
-            return new TodoCommand(args);
-        case "deadline":
-            return new DeadlineCommand(args);
-        case "event":
-            return new EventCommand(args);
-        case "mark":
-            return new MarkCommand(args);
-        case "unmark":
-            return new UnmarkCommand(args);
-        case "delete":
-            return new DeleteCommand(args);
-        case "find":
-            return new FindCommand(args);
-        default:
-            throw new LockyException(
-                    "Unknown command. Try: list | todo | deadline | event | mark | unmark | delete | find"
-            );
-        }
-    }
-
-    /**
      * Holds a parsed command and its raw arguments.
      *
-     * @param command
-     * @param args
+     * @param command parsed command.
+     * @param args arguments of command.
      */
     public record ParsedCommand(String command, String args) {}
 
     /**
      * Holds a parsed deadline description and due date/time.
      *
-     * @param description
-     * @param by
+     * @param description String description of task.
+     * @param by LocalDateTime object denoting deadline of task.
      */
     public record ParsedDeadline(String description, LocalDateTime by) {}
 
     /**
      * Holds a parsed event description, and start/end date/time.
      *
-     * @param description
-     * @param start
-     * @param end
+     * @param description String description of task.
+     * @param start LocalDateTime object denoting start of task.
+     * @param end LocalDateTime object denoting start of task.
      */
     public record ParsedEvent(String description, LocalDateTime start, LocalDateTime end) {}
 }
