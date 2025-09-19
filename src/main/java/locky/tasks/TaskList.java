@@ -122,9 +122,9 @@ public class TaskList {
      * Finds clash in timings for existing events when a new Event
      * is added into tasks.
      *
-     * @param from the LocalDateTime of the proposed start of Event
-     * @param to the LocalDateTime of the proposed end of Event
-     * @return null if no clashes; Event it clashes with
+     * @param from the LocalDateTime of the proposed start of Event.
+     * @param to the LocalDateTime of the proposed end of Event.
+     * @return null if no clashes; Event it clashes with.
      */
     private Event findClash(LocalDateTime from, LocalDateTime to) {
         for (Task t : this.tasks) {
@@ -188,8 +188,8 @@ public class TaskList {
      * Finds a list of tasks with descriptions
      * matching the given keyword.
      *
-     * @param keyword String matcher
-     * @return ArrayList of tasks containing keyword in description
+     * @param keyword String matcher.
+     * @return ArrayList of tasks containing keyword in description.
      */
     private TaskList find(String keyword) {
         ArrayList<Task> resultsArray = new ArrayList<>();
@@ -209,10 +209,10 @@ public class TaskList {
 
     /**
      * Formats a list of tasks into a string
-     * of search results
+     * of search results.
      *
-     * @param keyword String matcher
-     * @return String of tasks containing keyword in description
+     * @param keyword String matcher.
+     * @return String of tasks containing keyword in description.
      */
     public String formatFindResults(String keyword) {
         TaskList matches = find(keyword);

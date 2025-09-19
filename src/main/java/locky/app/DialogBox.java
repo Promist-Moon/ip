@@ -26,8 +26,9 @@ public class DialogBox extends HBox {
 
     /**
      * Constructs a dialog box with specified message text and avatar image.
-     * @param text message to display in dialog box
-     * @param img speaker's avatar image
+     *
+     * @param text message to display in dialog box.
+     * @param img speaker's avatar image.
      */
     private DialogBox(String text, Image img) {
         try {
@@ -62,9 +63,10 @@ public class DialogBox extends HBox {
 
     /**
      * Creates a DialogBox for user input through factory method.
-     * @param text message to display in dialog box
-     * @param img speaker's avatar image
-     * @return DialogBox styled for Locky's responses
+     *
+     * @param text message to display in dialog box.
+     * @param img speaker's avatar image.
+     * @return DialogBox styled for Locky's responses.
      */
     public static DialogBox getUserDialog(String text, Image img) {
         var db = new DialogBox(text, img);
@@ -76,9 +78,10 @@ public class DialogBox extends HBox {
 
     /**
      * Creates a DialogBox for Locky's responses through factory method.
-     * @param text message to display in dialog box
-     * @param img speaker's avatar image
-     * @return DialogBox styled for Locky's responses
+     *
+     * @param text message to display in dialog box.
+     * @param img speaker's avatar image.
+     * @return DialogBox styled for Locky's responses.
      */
     public static DialogBox getLockyDialog(String text, Image img) {
         var db = new DialogBox(text, img);

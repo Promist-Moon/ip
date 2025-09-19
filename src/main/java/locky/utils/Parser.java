@@ -152,9 +152,9 @@ public final class Parser {
     /**
      * Parses a raw line into a specific Command.
      *
-     * @param raw the raw user input line
-     * @return a Command ready to be executed
-     * @throws LockyException if the input is invalid or unknown
+     * @param raw the raw user input line.
+     * @return a Command ready to be executed.
+     * @throws LockyException if the input is invalid or unknown.
      */
     public static Command parse(String raw) throws LockyException {
         ParsedCommand pc = parseCommandLine(raw);
@@ -186,7 +186,7 @@ public final class Parser {
     }
 
     /**
-     * Holds a parsed command and its raw arguments
+     * Holds a parsed command and its raw arguments.
      *
      * @param command
      * @param args
@@ -194,7 +194,7 @@ public final class Parser {
     public record ParsedCommand(String command, String args) {}
 
     /**
-     * Holds a parsed deadline description and due date/time
+     * Holds a parsed deadline description and due date/time.
      *
      * @param description
      * @param by
@@ -202,7 +202,7 @@ public final class Parser {
     public record ParsedDeadline(String description, LocalDateTime by) {}
 
     /**
-     * Holds a parsed event description, and start/end date/time
+     * Holds a parsed event description, and start/end date/time.
      *
      * @param description
      * @param start

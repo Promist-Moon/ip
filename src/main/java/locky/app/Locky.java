@@ -27,7 +27,8 @@ public class Locky {
 
     /**
      * Returns greeting onboarding message.
-     * @return greeting String
+     *
+     * @return greeting String.
      */
     public String getGreeting() {
         return "Hello! I'm Locky\n"
@@ -38,8 +39,9 @@ public class Locky {
     /**
      * Handles user input as a String by returning
      * a String response by Locky.
-     * @param input String
-     * @return String response retrieved from handleLineToString
+     *
+     * @param input String.
+     * @return String response retrieved from handleLineToString.
      */
     public String getResponse(String input) {
         assert input != null : "input must not be null";
@@ -59,9 +61,10 @@ public class Locky {
 
     /**
      * Parses and executes a single line of user input as a Locky command.
-     * @param taskString raw user input
-     * @return formatted string containing Locky's response to the command
-     * @throws LockyException if arguments are empty or invalid
+     *
+     * @param taskString raw user input.
+     * @return formatted string containing Locky's response to the command.
+     * @throws LockyException if arguments are empty or invalid.
      */
     private String handleLineToString(String taskString) throws LockyException {
         var cmd = Parser.parse(taskString);

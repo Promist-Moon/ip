@@ -6,7 +6,7 @@ import java.util.Objects;
 import locky.utils.DateTimeFormat;
 
 /**
- * Represents an event task with a start and end datetime
+ * Represents an event task with a start and end datetime.
  */
 public class Event extends Task {
 

@@ -37,7 +37,7 @@ public class Deadline extends Task {
      * Returns deadline formatted as a string in
      * Locky.utils.DateTimeFormat's DISPLAY format.
      *
-     * @return formatted deadline
+     * @return formatted deadline.
      */
     public String getFormattedDeadline() {
         return DateTimeFormat.DISPLAY.format(deadline);

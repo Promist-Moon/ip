@@ -13,9 +13,10 @@ public class Main extends Application {
     private Locky locky = new Locky("./data/locky.txt");
 
     /**
-     * Starts the stage
-     * @param stage the primary stage for this application
-     * @throws Exception when controller fails to load
+     * Starts the stage.
+     *
+     * @param stage the primary stage for this application.
+     * @throws Exception when controller fails to load.
      */
     @Override
     public void start(Stage stage) throws Exception {
