@@ -1,4 +1,16 @@
 # AI Usage
+## Week 4
+### Tuesday, September 2
+<u>AI Tool used</u>:
+OpenAI ChatGPT (GPT-5)
+
+AI used for the generation of assets (see below) 
+![Locky.png](src/main/resources/images/Locky.png)
+_Locky.png_
+
+![User.png](src/main/resources/images/User.png)
+_User.png_
+
 ## Week 6
 ### Tuesday, September 16
 <u>AI Tool used</u>: 
