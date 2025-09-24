@@ -147,7 +147,7 @@ public final class Parser {
      */
     public static ParsedEvent parseEventArgs(String args) throws LockyException {
         if (args.isEmpty()) {
-            throw new LockyException("Locky.tasks.Event needs \"description /from start /to end\".");
+            throw new LockyException("Event needs \"description /from start /to end\".");
         }
 
         Matcher m = EVENT_RE.matcher(args);
@@ -165,20 +165,20 @@ public final class Parser {
         String start = m.group(2).trim();
         String end = m.group(3).trim();
         if (desc.isEmpty()) {
-            throw new LockyException("Locky.tasks.Event description cannot be empty.");
+            throw new LockyException("Event description cannot be empty.");
         }
         if (start.isEmpty()) {
-            throw new LockyException("Locky.tasks.Event start time cannot be empty after /from.");
+            throw new LockyException("Event start time cannot be empty after /from.");
         }
         if (end.isEmpty()) {
-            throw new LockyException("Locky.tasks.Event end time cannot be empty after /to.");
+            throw new LockyException("Event end time cannot be empty after /to.");
         }
 
         try {
             LocalDateTime startDt = LocalDateTime.parse(start, DateTimeFormat.INPUT);
             LocalDateTime endDt = LocalDateTime.parse(end, DateTimeFormat.INPUT);
             if (!endDt.isAfter(startDt)) {
-                throw new LockyException("Locky.tasks.Event end must be after start.");
+                throw new LockyException("Event end must be after start.");
             }
             return new ParsedEvent(desc, startDt, endDt);
         } catch (DateTimeParseException dpe) {
